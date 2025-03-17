@@ -1,0 +1,42 @@
+<h2>Add Coffee Log</h2>
+<form (submit)="addLog(); $event.preventDefault()">
+  <label>Date:</label>
+  <input type="date" [(ngModel)]="newLog.date" name="date" />
+
+  <label>Grams Used:</label>
+  <input type="number" [(ngModel)]="newLog.gramsUsed" name="gramsUsed" required />
+
+  <label>Cost (CHF):</label>
+  <input type="number" [(ngModel)]="newLog.cost" name="cost" required />
+
+  <label
+    >Brew Method:
+    <select [(ngModel)]="newLog.brewMethod" name="brewMethod" required>
+      <option value="">Select</option>
+      <option value="Espresso">Espresso</option>
+      <option value="V60">V60</option>
+      <option value="Kalita">Kalita</option>
+      <option value="Origami">Origami</option>
+      <option value="Origami Air">Origami Air</option>
+      <option value="Orea">Orea</option>
+      <option value="Chemex">Chemex</option>
+      <option value="Clever Dripper">Clever Dripper</option>
+      <option value="Dotyk">Dotyk</option>
+      <option value="Aeropress">Aeropress</option>
+      <option value="French Press">French Press</option>
+    </select>
+  </label>
+
+  <button type="submit">Add Log</button>
+</form>
+
+<h2>Logged Coffee Consumption</h2>
+<ul>
+  @for (log of logs; track $index) {
+    <li>
+    {{ log.date }} - {{ log.gramsUsed }}g - {{ log.cost }} CHF
+    <button (click)="deleteLog(log.id)">❌</button>
+  </li>
+  }
+  
+</ul>

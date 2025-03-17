@@ -1,1 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
+/* ✅ Dark Cosmic Theme */
+html, body { 
+  height: 100%;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif; /* Sci-fi font */
+  background-color: #0c0f17;
+  color: #ffffff;
+}
+
+/* ✅ Neon Glow Buttons */
+button {
+  background: #00a3e1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00a3e1;
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  box-shadow: 0 0 20px #00a3e1;
+  transform: scale(1.05);
+}
