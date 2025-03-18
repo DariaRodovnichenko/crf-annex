@@ -12,12 +12,15 @@ import { CoffeeLogService, CoffeeLog } from '../../services/coffee-log.service';
 })
 export class LogsComponent {
   logs: CoffeeLog[] = [];
+  selectedDate: string = new Date().toISOString().split('T')[0];
+
   newLog: CoffeeLog = {
     id: '',
-    date: '',
+    date: this.selectedDate,
     gramsUsed: 0,
     cost: 0,
     brewMethod: '',
+    source: 'Home',
   };
 
   constructor(private coffeeLogService: CoffeeLogService) {
@@ -25,23 +28,39 @@ export class LogsComponent {
   }
 
   loadLogs() {
-    this.logs = this.logs = [...this.coffeeLogService.getLogs()];
+    const allLogs = this.coffeeLogService.getLogs();
+    this.logs = allLogs.filter((log) => log.date === this.selectedDate);
+  }
+
+  resetForm() {
+    this.newLog = {
+      id: '',
+      date: this.selectedDate,
+      gramsUsed: 0,
+      cost: 0,
+      brewMethod: '',
+      source: 'Home',
+    };
   }
 
   addLog() {
     if (
       !this.newLog.date ||
       this.newLog.gramsUsed <= 0 ||
-      this.newLog.cost <= 0
+      (this.newLog.source === 'Coffee Shop' && this.newLog.cost <= 0)
     ) {
       alert('Please enter valid data!');
       return;
     }
 
+    if (this.newLog.source !== 'Coffee Shop') {
+      this.newLog.cost = 0;
+    }
+
     this.newLog.id = Math.random().toString(36).substr(2, 9);
-    this.coffeeLogService.addLog(this.newLog);
-    this.loadLogs(); // ✅ Refresh the list
-    this.newLog = { id: '', date: '', gramsUsed: 0, cost: 0, brewMethod: '' }; // ✅ Reset form
+    this.coffeeLogService.addLog({ ...this.newLog });
+    this.loadLogs();
+    this.resetForm();
   }
 
   deleteLog(id: string) {

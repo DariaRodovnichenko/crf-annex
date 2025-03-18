@@ -1,0 +1,9 @@
+<h1>More Features</h1>
+<div class="feature-grid">
+  @for (feature of allFeatures; track $index) {
+  <button mat-button [routerLink]="feature.route">
+    <mat-icon>{{ feature.icon }}</mat-icon>
+    <span>{{ feature.name }}</span>
+  </button>
+  }
+</div>

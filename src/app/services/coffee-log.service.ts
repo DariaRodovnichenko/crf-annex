@@ -6,6 +6,7 @@ export interface CoffeeLog {
   gramsUsed: number;
   cost: number;
   brewMethod: string;
+  source: 'Home' | 'Coffee Shop' | 'Gifted';
 }
 
 @Injectable({
@@ -13,6 +14,10 @@ export interface CoffeeLog {
 })
 export class CoffeeLogService {
   private coffeeLogs: CoffeeLog[] = [];
+
+  constructor() {
+    this.loadLogs();
+  }
 
   getLogs(): CoffeeLog[] {
     return this.coffeeLogs;
@@ -33,9 +38,9 @@ export class CoffeeLogService {
   }
 
   private loadLogs(): void {
-    const data = localStorage.getItem('coffeeLogs');
-    if (data) {
-      this.coffeeLogs = JSON.parse(data);
+    const savedLogs = localStorage.getItem('coffeeLogs');
+    if (savedLogs) {
+      this.coffeeLogs = JSON.parse(savedLogs);
     }
   }
 }

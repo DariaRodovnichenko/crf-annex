@@ -1,25 +1,13 @@
 import { Routes } from '@angular/router';
-import { provideRouter } from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { LogsComponent } from './pages/logs/logs.component';
+import { EquipmentComponent } from './pages/equipment/equipment.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  {
-    path: 'dashboard',
-    loadComponent: () =>
-      import('./pages/dashboard/dashboard.component').then(
-        (m) => m.DashboardComponent
-      ),
-  },
-  {
-    path: 'logs',
-    loadComponent: () =>
-      import('./pages/logs/logs.component').then((m) => m.LogsComponent),
-  },
-  {
-    path: 'equipment',
-    loadComponent: () =>
-      import('./pages/equipment/equipment.component').then(
-        (m) => m.EquipmentComponent
-      ),
-  },
+  { path: '', component: HomeComponent },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'logs', component: LogsComponent },
+  { path: 'equipment', component: EquipmentComponent },
+  { path: '**', redirectTo: '' },
 ];
