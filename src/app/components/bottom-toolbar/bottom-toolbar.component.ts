@@ -1,22 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-bottom-toolbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterModule, MatIconModule, MatButtonModule],
   templateUrl: './bottom-toolbar.component.html',
-  styleUrl: './bottom-toolbar.component.css',
+  styleUrls: ['./bottom-toolbar.component.css'],
 })
 export class BottomToolbarComponent {
   navLinks = [
     { path: '/home', icon: 'home', label: 'Home' },
-    { path: '/dashboard', icon: 'analytics', label: 'Extraction' },
-    { path: '/visuals', icon: 'bar_chart', label: 'Visuals' },
-    { path: '/expenses', icon: 'payments', label: 'Expenses' },
-    { path: '/more', icon: 'grid_view', label: 'More' },
+    { path: '/timer', icon: 'timer', label: 'Brewing Timer' },
+    { path: '/logs', icon: 'add_box', label: 'Brew Logs' },
+    { path: '/visuals', icon: 'insights', label: 'Brew Visuals' },
+    { path: '/settings', icon: 'person', label: 'Settings' },
   ];
 }

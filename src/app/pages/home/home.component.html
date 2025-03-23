@@ -1,25 +1,8 @@
-<div class="home-header">
-  <button mat-icon-button routerLink="/">
-    <mat-icon>home</mat-icon>
-  </button>
-  <h1>Your Coffee Companion</h1>
-  <button mat-icon-button routerLink="/settings">
-    <mat-icon>settings</mat-icon>
-  </button>
-</div>
-
 <div class="feature-grid">
-  @for (feature of features; track $index) {<button
-    mat-button
-    [routerLink]="feature.route"
-  >
+  @for (feature of features; track $index) {
+  <button mat-button class="feature-item" [routerLink]="feature.route">
     <mat-icon>{{ feature.icon }}</mat-icon>
     <span>{{ feature.name }}</span>
-  </button>
-  <!-- More Features Button -->
-  <button mat-button routerLink="/more">
-    <mat-icon>grid_view</mat-icon>
-    <span>More</span>
   </button>
   }
 </div>

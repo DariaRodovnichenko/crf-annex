@@ -1,6 +1,7 @@
 <nav class="bottom-toolbar">
-  @for (link of navLinks; track $index) {<a [routerLink]="link.path">
+  @for (link of navLinks; track $index) {
+  <a [routerLink]="link.path">
     <mat-icon>{{ link.icon }}</mat-icon>
-    <span>{{ link.label }}</span> </a
-  >}
+  </a>
+  }
 </nav>

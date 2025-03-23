@@ -1,14 +1,15 @@
 /* ✅ Dark Cosmic Theme */
-html, body { 
+html,
+body {
   height: 100%;
   margin: 0;
-  font-family: 'Orbitron', sans-serif; /* Sci-fi font */
+  font-family: "Orbitron", sans-serif; /* Sci-fi font */
   background-color: #0c0f17;
   color: #ffffff;
 }
 
 /* ✅ Neon Glow Buttons */
-button {
+button:not(.feature-item) {
   background: #00a3e1;
   color: white;
   border: none;
@@ -18,7 +19,27 @@ button {
   transition: all 0.3s ease-in-out;
 }
 
-button:hover {
+button:not(.feature-item):hover {
   box-shadow: 0 0 20px #00a3e1;
   transform: scale(1.05);
+}
+
+.mat-input-element {
+  color: #00f6ff !important;
+  font-weight: bold;
+  caret-color: #00f6ff !important;
+  text-shadow: 0 0 4px #00f6ff;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  border-color: #00f6ff !important;
+}
+
+.mat-form-field-label {
+  color: #00f6ff !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  border-color: #00f6ff !important;
+  box-shadow: 0 0 6px #00f6ff;
 }

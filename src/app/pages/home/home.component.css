@@ -1,0 +1,49 @@
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
+  width: 100%;
+  height: auto;
+  justify-content: center;
+  text-align: center;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 80%;
+  height: 80%;
+  aspect-ratio: 1.4 / 1;
+  background: rgba(0, 163, 225, 0.2);
+  border: 1px solid #00a3e1;
+  border-radius: 12px;
+  padding: 8px; /* Reduce padding */
+  box-shadow: 0 0 10px rgba(0, 163, 225, 0.5);
+  transition: all 0.3s ease-in-out;
+}
+
+.feature-item:hover {
+  box-shadow: 0 0 20px #00a3e1;
+  transform: scale(1.05);
+}
+
+.feature-item mat-icon {
+  font-size: 28px;
+  margin: 0 0 6px 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.feature-item span {
+  font-size: 14px;
+  margin-top: 4px;
+}
+

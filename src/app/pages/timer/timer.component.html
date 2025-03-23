@@ -1,0 +1,33 @@
+<div class="timer-container">
+  <h2>⏱ Brewing Timer</h2>
+  <div class="time-display">{{ formattedTime }}</div>
+
+  <div class="controls">
+    <!-- Only show START if timer not started or paused -->
+    @if (!isRunning || (isPaused && !intervalId)) {<button
+      mat-raised-button
+      color="primary"
+      (click)="isPaused ? resumeTimer() : startTimer()"
+    >
+      Start</button
+    >}
+
+    <!-- Show PAUSE if running -->
+    @if (isRunning && !isPaused) {<button
+      mat-raised-button
+      color="accent"
+      (click)="pauseTimer()"
+    >
+      Pause</button
+    >}
+
+    <!-- Show STOP if paused -->
+    @if (isPaused) {<button
+      mat-raised-button
+      color="warn"
+      (click)="stopTimer()"
+    >
+      Stop</button
+    >}
+  </div>
+</div>

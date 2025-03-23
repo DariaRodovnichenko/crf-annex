@@ -1,1 +1,32 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <h2>📈 Extraction Analysis</h2>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Dose (g)</mat-label>
+    <input matInput class="mat-input-element" type="number" [(ngModel)]="dose" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Yield (g)</mat-label>
+    <input matInput class="mat-input-element" type="number" [(ngModel)]="yield" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>TDS (%)</mat-label>
+    <input matInput class="mat-input-element" type="number" [(ngModel)]="tds" step="0.01" />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="calculate()">
+    Calculate
+  </button>
+  @if (result !== null) {
+  <div>
+    <p>
+      💡 Extraction Yield: <strong>{{ result.toFixed(2) }}%</strong>
+    </p>
+    <p [style.color]="getFeedback().color">
+      {{ getFeedback().text }}
+    </p>
+  </div>
+  }
+</div>
