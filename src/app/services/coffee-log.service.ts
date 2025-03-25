@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-
-export interface CoffeeLog {
-  id: string;
-  date: string;
-  gramsUsed: number;
-  cost: number;
-  brewMethod: string;
-  source: 'Home' | 'Coffee Shop' | 'Gifted';
-}
+import { CoffeeLog } from '../interfaces/log.model'; // ✅ adjust if your path is different
 
 @Injectable({
   providedIn: 'root',

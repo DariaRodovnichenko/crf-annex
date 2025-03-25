@@ -11,17 +11,26 @@
   </select>
 
   <label>Grams Used:</label>
-  <input type="number" [(ngModel)]="newLog.gramsUsed" name="gramsUsed" required />
+  <input
+    type="number"
+    [(ngModel)]="newLog.gramsUsed"
+    name="gramsUsed"
+    required
+  />
 
   <label>Cost (CHF):</label>
-  <input type="number" [(ngModel)]="newLog.cost" name="cost" [disabled]="newLog.source !== 'Coffee Shop'" />
+  <input
+    type="number"
+    [(ngModel)]="newLog.cost"
+    name="cost"
+    [disabled]="newLog.source !== 'Coffee Shop'"
+  />
 
   <label>Brew Method:</label>
   <select [(ngModel)]="newLog.brewMethod" name="brewMethod" required>
     <option value="">Select</option>
     <option value="Espresso">Espresso</option>
     <option value="Filter">Filter</option>
-    <option value="Beans">Beans</option>
   </select>
 
   <button type="submit">Add Log</button>
@@ -30,18 +39,20 @@
 <h2>Logged Coffee Consumption</h2>
 
 <!-- ✅ Default: Shows today's logs. User can change date to see past logs -->
-<label>View Logs for:
+<label
+  >View Logs for:
   <input type="date" [(ngModel)]="selectedDate" (change)="loadLogs()" />
 </label>
 
 <ul>
   @for (log of logs; track $index) {
-    <li>
-      {{ log.date }} - {{ log.brewMethod }} - {{ log.gramsUsed }}g - {{ log.source }}
-      @if (log.cost > 0) {
-        <span>{{ log.cost }} CHF</span>
-      }
-      <button (click)="deleteLog(log.id)">🗑 Delete</button>
-    </li>
+  <li>
+    {{ log.date }} - {{ log.brewMethod }} - {{ log.gramsUsed }}g -
+    {{ log.source }}
+    @if (log.cost > 0) {
+    <span>{{ log.cost }} CHF</span>
+    }
+    <button (click)="deleteLog(log.id)">🗑 Delete</button>
+  </li>
   }
 </ul>

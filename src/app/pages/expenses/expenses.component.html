@@ -1,2 +1,102 @@
-<h2>💸 Expenses</h2>
-<p>This will be the Expenses page using OCR.</p>
+<div class="expenses-container">
+  <h2>💰 Expense Tracker</h2>
+
+  <!-- Form -->
+  <div class="expense-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Title</mat-label>
+      <input matInput placeholder="e.g. Ethiopia Beans" [(ngModel)]="title" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" [(ngModel)]="amount" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="date" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Category</mat-label>
+      <mat-select [(ngModel)]="category">
+        <mat-option value="Beans">Beans</mat-option>
+        <mat-option value="Equipment">Equipment</mat-option>
+        <mat-option value="Accessories">Accessories</mat-option>
+        <mat-option value="Other">Other</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Currency</mat-label>
+      <mat-select [(ngModel)]="currency">
+        <mat-option value="€">€</mat-option>
+        <mat-option value="$">$</mat-option>
+        <mat-option value="£">£</mat-option>
+        <mat-option value="CHF">CHF</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="addExpense()">
+      ➕ Add Expense
+    </button>
+  </div>
+
+  <!-- Divider -->
+  <hr style="margin: 24px 0; border-color: #00f6ff33" />
+
+  <!-- Expense List -->
+  @if (expenses.length > 0) {
+  <div class="expense-list">
+    <h3>📊 Tracked Expenses</h3>
+    <mat-list>
+      @for (expense of expenses; track expense.id) {
+      <mat-list-item>
+        <div class="expense-row">
+          <span class="expense-title">{{ expense.title }}</span>
+          <span class="expense-details">
+            {{ expense.amount }} {{ currency }} • {{ expense.category }} •
+            {{ expense.date | date : "mediumDate" }}
+          </span>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteExpense(expense.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+      }
+    </mat-list>
+  </div>
+  }
+
+  <!-- Total -->
+  @if (expenses.length > 0 || totalCoffeeShopCost > 0) {
+  <div class="total-summary">
+    <p>
+      💵 Manual Expenses:
+      <strong
+        >{{ totalManualExpenses | number : "1.2-2" }} {{ currency }}</strong
+      >
+    </p>
+    <p>
+      ☕ Coffee Shop Logs:
+      <strong
+        >{{ totalCoffeeShopCost | number : "1.2-2" }} {{ currency }}</strong
+      >
+    </p>
+    <hr style="border-color: #00f6ff33" />
+    <p>
+      🧾
+      <strong
+        >Total Spent: {{ grandTotal | number : "1.2-2" }} {{ currency }}</strong
+      >
+    </p>
+  </div>
+  }
+</div>

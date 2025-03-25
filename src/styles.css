@@ -3,7 +3,7 @@ html,
 body {
   height: 100%;
   margin: 0;
-  font-family: "Orbitron", sans-serif; /* Sci-fi font */
+  font-family: "Orbitron", sans-serif;
   background-color: #0c0f17;
   color: #ffffff;
 }
@@ -24,6 +24,7 @@ button:not(.feature-item):hover {
   transform: scale(1.05);
 }
 
+/* ✅ Form Field & Inputs */
 .mat-input-element {
   color: #00f6ff !important;
   font-weight: bold;
@@ -35,11 +36,93 @@ button:not(.feature-item):hover {
   border-color: #00f6ff !important;
 }
 
-.mat-label {
+.mat-label,
+.mat-form-field-label {
   color: #00f6ff !important;
 }
 
 .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
   border-color: #00f6ff !important;
   box-shadow: 0 0 6px #00f6ff;
+}
+
+/* ✅ Datepicker Styling 🌌 */
+.mat-datepicker-content {
+  background-color: #072437 !important;
+  color: #ffffff;
+  border-radius: 12px;
+  font-family: "Orbitron", sans-serif;
+}
+
+.mat-calendar-body-cell-content {
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
+.mat-calendar-body-cell:hover .mat-calendar-body-cell-content,
+.mat-calendar-body-selected {
+  background-color: #00a3e1 !important;
+  color: #000 !important;
+}
+
+.mat-calendar-period-button {
+  color: #ffffff !important;
+}
+
+.mat-calendar-table-header th {
+  color: #ffffffb3 !important;
+}
+
+/* Cosmic Glow for Previous & Next Datepicker Buttons */
+.mat-calendar-previous-button,
+.mat-calendar-next-button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #00a3e1 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 10px #00a3e1;
+  padding: 6px !important;
+  margin: 4px !important;
+  color: #00f6ff !important;
+  width: 40px;
+  height: 40px;
+}
+
+.mat-calendar-previous-button svg,
+.mat-calendar-next-button svg {
+  fill: #00f6ff !important;
+  width: 24px;
+  height: 24px;
+}
+
+/* Fix the Datepicker Toggle Button & Icon Positioning */
+.mat-datepicker-toggle {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.mat-datepicker-toggle button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px !important;
+  margin: 6px !important;
+  background-color: #00a3e1;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #00a3e1;
+}
+
+.mat-datepicker-toggle-default-icon {
+  font-size: 20px !important;
+  color: #00f6ff !important;
+}
+
+/* Optional: Tighten MDC button area */
+.mat-mdc-button-touch-target {
+  padding: 0 !important;
+  margin: 0 !important;
 }
