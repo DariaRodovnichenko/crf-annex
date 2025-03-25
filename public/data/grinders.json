@@ -1,0 +1,92 @@
+[
+  {
+    "brand": "Comandante",
+    "model": "C40 MK4",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1200,
+    "steps": 40,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "Comandante",
+    "model": "C40 MK4 (Red Clix)",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1200,
+    "steps": 80,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "1Zpresso",
+    "model": "K-Max",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1400,
+    "steps": 155,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "1Zpresso",
+    "model": "J-Max",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1190,
+    "steps": 135,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "1Zpresso",
+    "model": "Q2 S",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1400,
+    "steps": 20,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "Fellow",
+    "model": "Opus",
+    "type": "electric",
+    "minMicrons": 230,
+    "maxMicrons": 1160,
+    "steps": 110,
+    "stepUnit": "step"
+  },
+  {
+    "brand": "KINGrinder",
+    "model": "K4/K6",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1400,
+    "steps": 88,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "Kinu",
+    "model": "M47 Phoenix",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1400,
+    "steps": 85,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "Niche",
+    "model": "Zero",
+    "type": "electric",
+    "minMicrons": 0,
+    "maxMicrons": 1400,
+    "steps": 113,
+    "stepUnit": "step"
+  },
+  {
+    "brand": "Option-O",
+    "model": "Lagom Mini",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1400,
+    "steps": 140,
+    "stepUnit": "step"
+  }
+]

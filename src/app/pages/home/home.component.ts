@@ -25,12 +25,6 @@ export class HomeComponent {
     JSON.parse(localStorage.getItem('userFeatures') || 'null') ||
     this.defaultFeatures;
 
-  // moreFeatures = [
-  //   { id: 5, name: 'Brew Timer', icon: 'timer', route: '/timer' },
-  //   { id: 6, name: 'Saved Brews', icon: 'save', route: '/saved-brews' },
-  //   { id: 7, name: 'Settings', icon: 'settings', route: '/settings' },
-  // ];
-
   saveUserFeatures() {
     localStorage.setItem('userFeatures', JSON.stringify(this.features));
   }

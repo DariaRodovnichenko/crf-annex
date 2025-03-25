@@ -1,0 +1,18 @@
+.grinder-container {
+  padding: 24px;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.result-box {
+  margin-top: 24px;
+  font-size: 1rem;
+  line-height: 1.6;
+}

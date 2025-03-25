@@ -16,7 +16,9 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'logs', component: LogsComponent },
   { path: 'equipment', component: EquipmentComponent },
-  { path: 'converter', component: GrinderComponent },
+  {
+    path: 'converter', component: GrinderComponent
+  },
   { path: 'expenses', component: ExpensesComponent },
   { path: 'more', component: MoreComponent },
   { path: 'favorites', component: RecipesComponent },

@@ -1,2 +1,51 @@
-<h2>☕ Grinder</h2>
-<p>This will be the Grinder Converter page using OCR.</p>
+<div class="grinder-container">
+  <h2>⚙️ Grinder Converter</h2>
+
+  <!-- From Grinder -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label class="mat-label">From Grinder</mat-label>
+    <mat-select [(ngModel)]="fromGrinder">
+      @for (g of grinders; track g.model) {
+      <mat-option [value]="g"> {{ g.brand }} {{ g.model }} </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <!-- From Value -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>
+      Grind Value @if (fromGrinder) {
+      <span>{{ "(" + fromGrinder.stepUnit + ")" }}</span>
+      }
+    </mat-label>
+    <input matInput class="mat-input-element" type="number" [(ngModel)]="fromValue" />
+  </mat-form-field>
+
+  <!-- To Grinder -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label class="mat-label">To Grinder</mat-label>
+    <mat-select [(ngModel)]="toGrinder">
+      @for (g of grinders; track g.model) {
+      <mat-option [value]="g"> {{ g.brand }} {{ g.model }} </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Convert Button -->
+  <button mat-raised-button color="primary" (click)="convert()">Convert</button>
+
+  <!-- Results -->
+  @if (result !== null) {
+  <div class="result-box">
+    <p>
+      🔬 Approx. Microns: <strong>{{ micronValue?.toFixed(0) }} µm</strong>
+    </p>
+    <p>
+      ✨ <strong>{{ fromValue }}</strong> {{ fromGrinder.stepUnit }} on
+      <strong>{{ fromGrinder.model }}</strong> ≈ <strong>{{ result }}</strong>
+      {{ toGrinder.stepUnit }} on
+      <strong>{{ toGrinder.model }}</strong>
+    </p>
+  </div>
+  }
+</div>
