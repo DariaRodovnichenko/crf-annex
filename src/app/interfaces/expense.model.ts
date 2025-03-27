@@ -4,4 +4,7 @@ export interface Expense {
   amount: number;
   category: 'Beans' | 'Equipment' | 'Accessories' | 'Other';
   date: string;
+  originalCurrency: string;
+  convertedAmount: number;
+  convertedCurrency: string;
 }

@@ -3,23 +3,32 @@
 
   <!-- Form -->
   <div class="expense-form">
+    <!-- Title -->
     <mat-form-field appearance="outline">
       <mat-label>Title</mat-label>
       <input matInput placeholder="e.g. Ethiopia Beans" [(ngModel)]="title" />
     </mat-form-field>
 
+    <!-- Price -->
     <mat-form-field appearance="outline">
       <mat-label>Price</mat-label>
       <input matInput type="number" [(ngModel)]="amount" />
     </mat-form-field>
 
+    <!-- Date -->
     <mat-form-field appearance="outline">
       <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="picker" [(ngModel)]="date" />
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [(ngModel)]="date"
+        placeholder="Choose a date"
+      />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
+    <!-- Category -->
     <mat-form-field appearance="outline">
       <mat-label>Category</mat-label>
       <mat-select [(ngModel)]="category">
@@ -30,17 +39,23 @@
       </mat-select>
     </mat-form-field>
 
+    <!-- Currency -->
     <mat-form-field appearance="outline">
       <mat-label>Currency</mat-label>
       <mat-select [(ngModel)]="currency">
-        <mat-option value="€">€</mat-option>
-        <mat-option value="$">$</mat-option>
-        <mat-option value="£">£</mat-option>
-        <mat-option value="CHF">CHF</mat-option>
+        @for (currency of availableCurrencies; track currency) {<mat-option [value]="currency">
+          {{ currency }} </mat-option
+        >}
       </mat-select>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="addExpense()">
+    <!-- Add Button -->
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addExpense()"
+      [disabled]="!title || !amount || !date"
+    >
       ➕ Add Expense
     </button>
   </div>
@@ -49,11 +64,11 @@
   <hr style="margin: 24px 0; border-color: #00f6ff33" />
 
   <!-- Expense List -->
-  @if (expenses.length > 0) {
+  @if (filteredExpenses.length > 0) {
   <div class="expense-list">
     <h3>📊 Tracked Expenses</h3>
     <mat-list>
-      @for (expense of expenses; track expense.id) {
+      @for (expense of filteredExpenses; track expense.id) {
       <mat-list-item>
         <div class="expense-row">
           <span class="expense-title">{{ expense.title }}</span>
@@ -65,6 +80,7 @@
             mat-icon-button
             color="warn"
             (click)="deleteExpense(expense.id)"
+            aria-label="Delete expense"
           >
             <mat-icon>delete</mat-icon>
           </button>
@@ -75,7 +91,7 @@
   </div>
   }
 
-  <!-- Total -->
+  <!-- Totals -->
   @if (expenses.length > 0 || totalCoffeeShopCost > 0) {
   <div class="total-summary">
     <p>
@@ -99,4 +115,55 @@
     </p>
   </div>
   }
+
+  <!-- Filters -->
+  <div class="expense-filters">
+    <h3>🔍 Filter Expenses</h3>
+
+    <mat-form-field appearance="outline">
+      <mat-label class="mat-label">Category</mat-label>
+      <mat-select [(ngModel)]="filterCategory">
+        <mat-option value="">All</mat-option>
+        <mat-option value="Beans">Beans</mat-option>
+        <mat-option value="Equipment">Equipment</mat-option>
+        <mat-option value="Accessories">Accessories</mat-option>
+        <mat-option value="Other">Other</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label class="mat-label">Start Date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="startPicker"
+        [(ngModel)]="filterStartDate"
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="startPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #startPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label class="mat-label">End Date</mat-label>
+      <input matInput [matDatepicker]="endPicker" [(ngModel)]="filterEndDate" />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="endPicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #endPicker></mat-datepicker>
+    </mat-form-field>
+    <div style="display: flex; gap: 12px; margin-top: 12px">
+      <button mat-raised-button color="primary" (click)="applyFilters()">
+        🔍 Apply Filters
+      </button>
+      <button mat-stroked-button color="warn" (click)="resetFilters()">
+        ✖ Clear Filters
+      </button>
+      <button mat-raised-button color="primary" (click)="exportToCSV()">
+        📤 Export Expenses (CSV)
+      </button>
+    </div>
+  </div>
 </div>

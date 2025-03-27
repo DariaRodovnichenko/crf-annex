@@ -126,3 +126,36 @@ button:not(.feature-item):hover {
   padding: 0 !important;
   margin: 0 !important;
 }
+
+.mat-mdc-input-element {
+  color: #00f6ff !important;
+  font-weight: bold;
+  caret-color: #00f6ff !important;
+  text-shadow: 0 0 4px #00f6ff;
+}
+
+/* 🌌 Styling for mat-select (selected value display) */
+.mat-mdc-select-value {
+  color: #00f6ff !important;
+  font-weight: bold;
+  text-shadow: 0 0 4px #00f6ff;
+}
+
+/* 🌌 Styling dropdown panel */
+.mat-mdc-select-panel {
+  background-color: #00a3e1 !important;
+  color: #ffffff !important;
+  font-family: "Orbitron", sans-serif;
+  border-radius: 8px;
+}
+
+/* ✨ Highlight hovered option */
+.mat-mdc-option:hover {
+  background-color: #00a3e144 !important;
+  color: #00f6ff !important;
+}
+
+✅ Selected option styling .mat-mdc-option.mdc-list-item--selected {
+  background-color: #00a3e1 !important;
+  color: #ffffff !important;
+}
