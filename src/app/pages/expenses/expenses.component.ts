@@ -2,10 +2,10 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, firstValueFrom } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
-// Angular Material Standalone Components
+// Angular Material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
@@ -18,7 +18,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 // Interfaces
 import { CoffeeLog } from '../../interfaces/log.model';
 import { Expense } from '../../interfaces/expense.model';
-import { CurrencyConverterService } from '../../services/currency-converter.service';
+
+// Services
+import { CurrencyConverterService } from '../../services/currencyApi/currency-converter.service';
 
 @Component({
   selector: 'app-expenses',
@@ -39,21 +41,24 @@ import { CurrencyConverterService } from '../../services/currency-converter.serv
   styleUrls: ['./expenses.component.css'],
 })
 export class ExpensesComponent implements OnInit {
+  // Form fields
   title: string = '';
   amount: number | null = null;
   category: 'Beans' | 'Equipment' | 'Accessories' | 'Other' = 'Beans';
   date: string = '';
   currency: string = 'CHF';
+
+  // Currency
   preferredCurrency: string = 'CHF';
-  currencies: string[] = ['€', '$', 'CHF', '£'];
   exchangeRates: { [key: string]: number } = {};
   availableCurrencies: string[] = [];
 
+  // Expense data
   expenses: Expense[] = [];
+  filteredExpenses: Expense[] = [];
   logs: CoffeeLog[] = [];
 
   // Filtering
-  filteredExpenses: Expense[] = [];
   filterCategory: string = '';
   filterStartDate: Date | null = null;
   filterEndDate: Date | null = null;
@@ -64,32 +69,29 @@ export class ExpensesComponent implements OnInit {
     private currencyService: CurrencyConverterService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.loadExpenses();
     this.loadLogs();
 
-    this.currencyService.getAvailableCurrencies().subscribe((currencies) => {
-      if (currencies.length > 0) {
-        this.availableCurrencies = currencies;
-        this.currency = this.preferredCurrency; // default selection
+    try {
+      const rates = await firstValueFrom(
+        this.currencyService.fetchExchangeRates(this.preferredCurrency)
+      );
+      this.exchangeRates = rates;
 
-        // ✅ Fetch exchange rates only after currencies are loaded
-        this.currencyService
-          .fetchExchangeRates(this.preferredCurrency)
-          .subscribe((rates) => {
-            this.exchangeRates = rates;
-          });
-      } else {
-        console.error('No currencies available from API');
-      }
-    });
+      const symbols = await firstValueFrom(
+        this.currencyService.getAvailableCurrencies()
+      );
+      this.availableCurrencies = symbols;
+    } catch (error) {
+      console.error('Currency API error:', error);
+    }
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.loadLogs();
-        this.cdr.detectChanges();
-      });
+   await firstValueFrom(
+     this.router.events.pipe(filter((event) => event instanceof NavigationEnd))
+   );
+   this.loadLogs();
+   this.cdr.detectChanges();
   }
 
   loadLogs(): void {
@@ -106,28 +108,39 @@ export class ExpensesComponent implements OnInit {
     localStorage.setItem('expenses', JSON.stringify(this.expenses));
   }
 
-  addExpense(): void {
+  async addExpense(): Promise<void> {
     if (!this.title || !this.amount || !this.date || !this.currency) return;
 
-    this.currencyService
-      .convert(this.currency, this.preferredCurrency, this.amount)
-      .subscribe((convertedAmount) => {
-        const newExpense: Expense = {
-          id: uuidv4(),
-          title: this.title,
-          amount: this.amount!,
-          category: this.category,
-          date: this.date,
-          originalCurrency: this.currency,
-          convertedAmount,
-          convertedCurrency: this.preferredCurrency,
-        };
+    let convertedAmount = this.amount;
+    if (this.currency !== this.preferredCurrency) {
+      try {
+        convertedAmount = await firstValueFrom(
+          this.currencyService.convert(
+            this.currency,
+            this.preferredCurrency,
+            this.amount
+          )
+        );
+      } catch (error) {
+        console.error('Conversion failed. Using original amount.');
+      }
+    }
 
-        this.expenses.unshift(newExpense);
-        this.saveExpenses();
-        this.resetForm();
-        this.applyFilters();
-      });
+    const newExpense: Expense = {
+      id: uuidv4(),
+      title: this.title,
+      amount: this.amount!,
+      category: this.category,
+      date: this.date,
+      originalCurrency: this.currency,
+      convertedAmount,
+      convertedCurrency: this.preferredCurrency,
+    };
+
+    this.expenses.unshift(newExpense);
+    this.saveExpenses();
+    this.resetForm();
+    this.applyFilters();
   }
 
   deleteExpense(id: string): void {
@@ -141,11 +154,12 @@ export class ExpensesComponent implements OnInit {
     this.amount = null;
     this.date = '';
     this.category = 'Beans';
+    this.currency = this.preferredCurrency;
   }
 
   // Totals
   get totalManualExpenses(): number {
-    return this.expenses.reduce(
+    return this.filteredExpenses.reduce(
       (acc, exp) => acc + (exp.convertedAmount ?? exp.amount),
       0
     );
@@ -161,19 +175,19 @@ export class ExpensesComponent implements OnInit {
     return this.totalManualExpenses + this.totalCoffeeShopCost;
   }
 
-  // Filters
+  // Filtering
   applyFilters(): void {
     this.filteredExpenses = this.expenses.filter((exp) => {
       const matchesCategory = this.filterCategory
         ? exp.category === this.filterCategory
         : true;
-      const matchesStartDate = this.filterStartDate
+      const matchesStart = this.filterStartDate
         ? new Date(exp.date) >= new Date(this.filterStartDate)
         : true;
-      const matchesEndDate = this.filterEndDate
+      const matchesEnd = this.filterEndDate
         ? new Date(exp.date) <= new Date(this.filterEndDate)
         : true;
-      return matchesCategory && matchesStartDate && matchesEndDate;
+      return matchesCategory && matchesStart && matchesEnd;
     });
   }
 
@@ -190,10 +204,11 @@ export class ExpensesComponent implements OnInit {
       return;
     }
 
-    const header = 'Title,Price,Category,Date\n';
+    const header = 'Title,Price,Category,Date,Converted,OriginalCurrency\n';
     const rows = this.filteredExpenses
       .map(
-        (exp) => `"${exp.title}",${exp.amount},${exp.category},"${exp.date}"`
+        (exp) =>
+          `"${exp.title}",${exp.amount},${exp.category},"${exp.date}",${exp.convertedAmount},${exp.originalCurrency}`
       )
       .join('\n');
 
@@ -202,8 +217,8 @@ export class ExpensesComponent implements OnInit {
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'filtered_expenses.csv');
+    link.href = url;
+    link.download = 'filtered_expenses.csv';
     link.click();
   }
 }

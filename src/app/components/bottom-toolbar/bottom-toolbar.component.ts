@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +17,6 @@ export class BottomToolbarComponent {
     { path: '/timer', icon: 'timer', label: 'Brewing Timer' },
     { path: '/logs', icon: 'add_box', label: 'Brew Logs' },
     { path: '/visuals', icon: 'insights', label: 'Brew Visuals' },
-    { path: '/settings', icon: 'person', label: 'Settings' },
+    { path: '/settings', icon: 'settings', label: 'Settings' },
   ];
 }

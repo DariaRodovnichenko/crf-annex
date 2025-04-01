@@ -1,0 +1,19 @@
+<!-- If logged in -->
+@if (authState$ | async; as user) {
+<div>
+  <p>👋 Welcome, {{ user.email || "Guest" }}</p>
+  <button (click)="onLogout()">Log Out</button>
+</div>
+} @else {
+
+<!-- If logged out -->
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+  <input formControlName="email" placeholder="Email" />
+  <input formControlName="password" placeholder="Password" type="password" />
+  <button type="submit">Log In</button>
+
+  @if (error) {
+  <p>{{ error }}</p>
+  }
+</form>
+}

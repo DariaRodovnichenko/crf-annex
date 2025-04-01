@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CoffeeLog } from '../interfaces/log.model'; // ✅ adjust if your path is different
+import { CoffeeLog } from '../../interfaces/log.model';
 
 @Injectable({
   providedIn: 'root',

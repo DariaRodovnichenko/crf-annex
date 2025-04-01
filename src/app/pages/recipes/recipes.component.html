@@ -1,2 +1,54 @@
-<h2>📝Recipes</h2>
-<p>This will be the Recipes page using OCR.</p>
+<h2>Your Created Recipes</h2>
+@if (userRecipes.length > 0) {
+<ul>
+  @for ( recipe of userRecipes; track $index) {
+  <li (click)="viewRecipe(recipe)">
+    <strong>{{ recipe.name }}</strong> — {{ recipe.method }} <br />
+    <small>Beans: {{ recipe.beans }}</small>
+  </li>
+  }
+</ul>
+} @else {
+<p>You haven't added any recipes yet.</p>
+}
+
+<h2>Your Favorite Recipes</h2>
+@if (favoriteRecipes.length > 0) {
+<ul>
+  @for ( recipe of favoriteRecipes; track $index) {
+  <li (click)="viewRecipe(recipe)">
+    <strong>{{ recipe.name }}</strong> — {{ recipe.method }} <br />
+    <small>Beans: {{ recipe.beans }}</small>
+  </li>
+  }
+</ul>
+} @else {
+<p>No favorites saved yet.</p>
+}
+
+<!-- recipe modal -->
+@if (selectedRecipe) {
+<div class="modal">
+  <h3>{{ selectedRecipe.name }}</h3>
+  <p><strong>Beans:</strong> {{ selectedRecipe.beans }}</p>
+  <p><strong>Method:</strong> {{ selectedRecipe.method }}</p>
+  @if (selectedRecipe.country) {
+  <p><strong>Country:</strong> {{ selectedRecipe.country }}</p>
+  } @if (selectedRecipe.year) {
+  <p><strong>Year:</strong>{{ selectedRecipe.year }}</p>
+  }
+  <p><strong>Ingredients:</strong>{{ selectedRecipe.ingredients }}</p>
+  <p><strong>Steps:</strong></p>
+  <ul>
+    @for (step of selectedRecipe.steps.split(','); track $index) {
+    <li>
+      {{ step.trim() }}
+    </li>
+    }
+  </ul>
+  <p><strong>Year:</strong>{{ selectedRecipe.grinder }}</p>
+  <p><strong>Year:</strong>{{ selectedRecipe.filter }}</p>
+
+  <button (click)="closeModal()">Close</button>
+</div>
+}

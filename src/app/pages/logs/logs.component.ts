@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CoffeeLogService } from '../../services/coffee-log.service';
+import { CoffeeLogService } from '../../services/coffee-log/coffee-log.service';
 import { CoffeeLog } from '../../interfaces/log.model';
 
 @Component({

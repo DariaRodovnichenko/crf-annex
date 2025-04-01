@@ -1,0 +1,14 @@
+<nav class="header">
+<img src="/logo.png" alt="Logo" class="logo" />
+
+ <div class="spacer"></div>
+
+  @if (authState$ | async; as user) {
+    <p class="welcome">👋 {{ user.email || 'Guest' }}</p>
+    <button mat-raised-button color="primary" (click)="logout()">Log Out</button>
+  } @else {
+    <a [routerLink]="['/login']">
+      <mat-icon>person</mat-icon>
+    </a>
+  }
+</nav>

@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 
 import { GrinderSpec } from '../../interfaces/grinder.model';
-import { GrindConverterService } from '../../services/grind-converter.service';
+import { GrindConverterService } from '../../services/grinder/grind-converter.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({

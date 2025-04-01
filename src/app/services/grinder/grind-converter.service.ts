@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GrinderSpec } from '../interfaces/grinder.model';
+import { GrinderSpec } from '../../interfaces/grinder.model';
 
 @Injectable({
   providedIn: 'root',

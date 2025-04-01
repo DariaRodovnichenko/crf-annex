@@ -39,3 +39,9 @@
 .total-summary strong {
   color: #00f6ff;
 }
+
+.original-currency {
+  font-size: 0.8rem;
+  color: #ccc;
+  margin-left: 4px;
+}
