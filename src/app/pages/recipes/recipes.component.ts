@@ -30,13 +30,15 @@ export class RecipesComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const user: User | null = await firstValueFrom(this.authService.authState$);
 
+    console.log('Current user:', user);
+
     if (!user) {
-      console.warn('User not logged in');
-      this.router.navigate(['/']);
+      console.error('No user found - Firebase auth issue');
+      this.toastr.error('Authentication error. Please try reloading the app.');
       return;
     }
 
-    if (user.isAnonymous) {
+    if (!user?.email) {
       console.log('👻 Anonymous user!');
       this.toastr.info(
         "You're browsing as a guest. Full recipe list is disabled.",
@@ -51,12 +53,18 @@ export class RecipesComponent implements OnInit {
 
     this.userUid = user.uid;
 
-    // ✅ Load recipes
-    this.userRecipes = await this.dbService.getUserRecipes(this.userUid);
-    this.favoriteRecipes = await this.dbService.getUserFavorites(this.userUid);
-
-    console.log('📖 Created Recipes:', this.userRecipes);
-    console.log('⭐ Favorite Recipes:', this.favoriteRecipes);
+    // Load recipes
+    try {
+      this.userRecipes = await this.dbService.getUserRecipes(this.userUid);
+      this.favoriteRecipes = await this.dbService.getUserFavorites(
+        this.userUid
+      );
+      console.log('📖 Created Recipes:', this.userRecipes);
+      console.log('⭐ Favorite Recipes:', this.favoriteRecipes);
+    } catch (error) {
+      console.error('🔥 Failed to load recipes:', error);
+      this.toastr.error('Could not load recipes. Please try again later.');
+    }
   }
 
   viewRecipe(recipe: any): void {

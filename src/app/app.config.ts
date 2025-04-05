@@ -12,6 +12,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { environment } from '../environments/environment';
+import { provideIonicAngular } from '@ionic/angular/standalone';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,6 @@ export const appConfig: ApplicationConfig = {
     // Firebase
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideDatabase(() => getDatabase()),
-    provideAuth(() => getAuth()),
+    provideAuth(() => getAuth()), provideIonicAngular({}),
   ],
 };
