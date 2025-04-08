@@ -1,14 +1,24 @@
-<nav class="header">
-<img src="/logo.png" alt="Logo" class="logo" />
+<ion-header ngSkipHydration>
+  <ion-toolbar>
+    <ion-buttons slot="start" [routerLink]="['/']">
+      <ion-img src="/logo.png" alt="Logo" style="height: 40px" />
+    </ion-buttons>
 
- <div class="spacer"></div>
+   <ion-title>{{ pageTitle$ | async }}</ion-title>
 
-  @if (authState$ | async; as user) {
-    <p class="welcome">👋 {{ user.email || 'Guest' }}</p>
-    <button mat-raised-button color="primary" (click)="logout()">Log Out</button>
-  } @else {
-    <a [routerLink]="['/login']">
-      <mat-icon>person</mat-icon>
-    </a>
-  }
-</nav>
+    <ion-buttons slot="end">
+      @if (authState$ | async; as user) {
+      <ion-label>👋 {{ user.email || "Guest" }}</ion-label>
+
+      @if (user.isAnonymous) {
+      <ion-button [routerLink]="['/login']">
+        <ion-icon [src]="personIcon"></ion-icon>
+      </ion-button>
+      } @else {
+      <ion-button (click)="logout()">
+        <ion-icon [src]="logoutIcon" slot="icon-only"></ion-icon>
+      </ion-button>
+      } }
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

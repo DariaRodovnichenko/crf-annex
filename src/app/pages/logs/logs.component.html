@@ -1,58 +1,132 @@
-<h2>Add Coffee Log</h2>
-<form (submit)="addLog(); $event.preventDefault()">
-  <label>Date:</label>
-  <input type="date" [(ngModel)]="newLog.date" name="date" required />
+<app-header></app-header>
 
-  <label>Source:</label>
-  <select [(ngModel)]="newLog.source" name="source" required>
-    <option value="Home">Home</option>
-    <option value="Coffee Shop">Coffee Shop</option>
-    <option value="Gifted">Gifted</option>
-  </select>
+<ion-content class="ion-padding" ngSkipHydration>
+  <!-- Add Log Section -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>➕ Add Coffee Log</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form ngForm (ngSubmit)="onSubmit()">
+        <!-- Date -->
+        <ion-item>
+          <ion-label position="stacked">Date</ion-label>
+          <ion-input
+            type="date"
+            [ngModel]="newLog.date"
+            (ngModelChange)="updateNewLog('date', $event)"
+            name="date"
+            required
+          ></ion-input>
+        </ion-item>
 
-  <label>Grams Used:</label>
-  <input
-    type="number"
-    [(ngModel)]="newLog.gramsUsed"
-    name="gramsUsed"
-    required
-  />
+        <!-- Source -->
+        <ion-item>
+          <ion-label position="stacked">Source</ion-label>
+          <ion-select
+            [ngModel]="newLog.source"
+            (ngModelChange)="updateNewLog('source', $event)"
+            name="source"
+            interface="popover"
+            required
+          >
+            <ion-select-option value="Home">Home</ion-select-option>
+            <ion-select-option value="Coffee Shop"
+              >Coffee Shop</ion-select-option
+            >
+            <ion-select-option value="Gifted">Gifted</ion-select-option>
+          </ion-select>
+        </ion-item>
 
-  <label>Cost (CHF):</label>
-  <input
-    type="number"
-    [(ngModel)]="newLog.cost"
-    name="cost"
-    [disabled]="newLog.source !== 'Coffee Shop'"
-  />
+        <!-- Grams Used -->
+        <ion-item>
+          <ion-label position="stacked">Grams Used</ion-label>
+          <ion-input
+            type="number"
+            [ngModel]="newLog.gramsUsed"
+            (ngModelChange)="updateNewLog('gramsUsed', $event)"
+            name="gramsUsed"
+            required
+          ></ion-input>
+        </ion-item>
 
-  <label>Brew Method:</label>
-  <select [(ngModel)]="newLog.brewMethod" name="brewMethod" required>
-    <option value="">Select</option>
-    <option value="Espresso">Espresso</option>
-    <option value="Filter">Filter</option>
-  </select>
+        <!-- Cost -->
+        <ion-item>
+          <ion-label position="stacked">Cost (CHF)</ion-label>
+          <ion-input
+            type="number"
+            [ngModel]="newLog.cost"
+            (ngModelChange)="updateNewLog('cost', $event)"
+            name="cost"
+            [disabled]="newLog.source !== 'Coffee Shop'"
+          ></ion-input>
+        </ion-item>
 
-  <button type="submit">Add Log</button>
-</form>
+        <!-- Brew Method -->
+        <ion-item>
+          <ion-label position="stacked">Brew Method</ion-label>
+          <ion-select
+            [ngModel]="newLog.brewMethod"
+            (ngModelChange)="updateNewLog('brewMethod', $event)"
+            name="brewMethod"
+            interface="popover"
+            required
+          >
+            <ion-select-option value="">Select</ion-select-option>
+            <ion-select-option value="Espresso">Espresso</ion-select-option>
+            <ion-select-option value="Filter">Filter</ion-select-option>
+          </ion-select>
+        </ion-item>
 
-<h2>Logged Coffee Consumption</h2>
+        <ion-button expand="block" type="submit" class="ion-margin-top">
+          ➕ Add Log
+        </ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
 
-<!-- ✅ Default: Shows today's logs. User can change date to see past logs -->
-<label
-  >View Logs for:
-  <input type="date" [(ngModel)]="selectedDate" (change)="loadLogs()" />
-</label>
+  <!-- View Logs Section -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>📅 View Coffee Logs</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <!-- Date Filter -->
+      <ion-item>
+        <ion-label position="stacked">View Logs for:</ion-label>
+        <ion-input
+          type="date"
+          [ngModel]="selectedDate"
+          (ngModelChange)="selectedDate = $event"
+        ></ion-input>
+      </ion-item>
 
-<ul>
-  @for (log of logs; track $index) {
-  <li>
-    {{ log.date }} - {{ log.brewMethod }} - {{ log.gramsUsed }}g -
-    {{ log.source }}
-    @if (log.cost > 0) {
-    <span>{{ log.cost }} CHF</span>
-    }
-    <button (click)="deleteLog(log.id)">🗑 Delete</button>
-  </li>
-  }
-</ul>
+      <!-- Logs List -->
+      @if (logs$ |async; as logs) {
+      <ion-list>
+        @for (log of logs; track log.id) {
+        <ion-item>
+          <ion-label>
+            <h3>{{ log.date }} - {{ log.brewMethod }}</h3>
+            <p>{{ log.gramsUsed }}g - {{ log.source }}</p>
+            @if (log.cost > 0) {
+            <p>{{ log.cost }} CHF</p>
+            }
+          </ion-label>
+          <ion-button
+            slot="end"
+            fill="clear"
+            color="danger"
+            (click)="onDeleteLog(log)"
+          >
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        }
+      </ion-list>
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<app-bottom-toolbar></app-bottom-toolbar>

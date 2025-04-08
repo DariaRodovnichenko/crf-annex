@@ -1,8 +1,8 @@
-<div class="expenses-container">
+<div>
   <h2>💰 Expense Tracker</h2>
 
   <!-- Form -->
-  <div class="expense-form">
+  <div>
     <!-- Title -->
     <mat-form-field appearance="outline">
       <mat-label>Title</mat-label>
@@ -67,25 +67,22 @@
 
   <!-- Expense List -->
   @if (filteredExpenses.length > 0) {
-  <div class="expense-list">
+  <div>
     <h3>📊 Tracked Expenses</h3>
     <mat-list>
       @for (expense of filteredExpenses; track expense.id) {
       <mat-list-item>
-        <div class="expense-row">
-          <span class="expense-title">{{ expense.title }}</span>
-          <span class="expense-details">
+        <div>
+          <span>{{ expense.title }}</span>
+          <span>
             {{ expense.convertedAmount | number : "1.2-2" }}
             {{ preferredCurrency }}
-            <span class="original-currency">
-              ({{ expense.amount }} {{ expense.originalCurrency }})
-            </span>
+            <span> ({{ expense.amount }} {{ expense.originalCurrency }}) </span>
             • {{ expense.category }} •
             {{ expense.date | date : "mediumDate" }}
           </span>
           <button
             mat-icon-button
-            color="warn"
             (click)="deleteExpense(expense.id)"
             aria-label="Delete expense"
           >
@@ -100,11 +97,12 @@
 
   <!-- Totals -->
   @if (expenses.length > 0 || totalCoffeeShopCost > 0) {
-  <div class="total-summary">
+  <div>
     <p>
       💵 Manual Expenses:
       <strong
-        >{{ totalManualExpenses | number : "1.2-2" }} {{ preferredCurrency }}</strong
+        >{{ totalManualExpenses | number : "1.2-2" }}
+        {{ preferredCurrency }}</strong
       >
     </p>
     <p>
@@ -113,7 +111,7 @@
         >{{ totalCoffeeShopCost | number : "1.2-2" }} {{ currency }}</strong
       >
     </p>
-    <hr style="border-color: #00f6ff33" />
+    <hr />
     <p>
       🧾
       <strong
@@ -124,11 +122,11 @@
   }
 
   <!-- Filters -->
-  <div class="expense-filters">
+  <div>
     <h3>🔍 Filter Expenses</h3>
 
     <mat-form-field appearance="outline">
-      <mat-label class="mat-label">Category</mat-label>
+      <mat-label>Category</mat-label>
       <mat-select [(ngModel)]="filterCategory">
         <mat-option value="">All</mat-option>
         <mat-option value="Beans">Beans</mat-option>
@@ -139,7 +137,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label class="mat-label">Start Date</mat-label>
+      <mat-label>Start Date</mat-label>
       <input
         matInput
         [matDatepicker]="startPicker"
@@ -153,7 +151,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label class="mat-label">End Date</mat-label>
+      <mat-label>End Date</mat-label>
       <input matInput [matDatepicker]="endPicker" [(ngModel)]="filterEndDate" />
       <mat-datepicker-toggle
         matSuffix
@@ -161,14 +159,14 @@
       ></mat-datepicker-toggle>
       <mat-datepicker #endPicker></mat-datepicker>
     </mat-form-field>
-    <div style="display: flex; gap: 12px; margin-top: 12px">
-      <button mat-raised-button color="primary" (click)="applyFilters()">
+    <div>
+      <button mat-raised-button (click)="applyFilters()">
         🔍 Apply Filters
       </button>
-      <button mat-stroked-button color="warn" (click)="resetFilters()">
+      <button mat-stroked-button (click)="resetFilters()">
         ✖ Clear Filters
       </button>
-      <button mat-raised-button color="primary" (click)="exportToCSV()">
+      <button mat-raised-button (click)="exportToCSV()">
         📤 Export Expenses (CSV)
       </button>
     </div>

@@ -13,10 +13,14 @@ import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'logs', component: LogsComponent },
+  { path: '', component: HomeComponent, data: { title: '🏠 Home' } },
+  { path: 'login', component: LoginComponent, data: { title: '🔐 Login' } },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    data: { title: '🧪 Extraction Analysis' },
+  },
+  { path: 'logs', component: LogsComponent, data: { title: '📘 Brew Logs' } },
   {
     path: 'settings',
     component: SettingsComponent,
@@ -24,12 +28,37 @@ export const routes: Routes = [
   {
     path: 'converter',
     component: GrinderComponent,
+    data: { title: '⚖️ Grinder Converter' },
   },
-  { path: 'expenses', component: ExpensesComponent },
-  { path: 'more', component: MoreComponent },
-  { path: 'favorites', component: RecipesComponent },
-  { path: 'visuals', component: VisualsComponent },
-  { path: 'timer', component: TimerComponent },
-  { path: 'tds-scan', component: TdsScanComponent },
+  {
+    path: 'expenses',
+    component: ExpensesComponent,
+    data: { title: '💰 Expenses' },
+  },
+  {
+    path: 'more',
+    component: MoreComponent,
+    data: { title: '✨ More Features' },
+  },
+  {
+    path: 'favorites',
+    component: RecipesComponent,
+    data: { title: '❤️ Saved Recipes' },
+  },
+  {
+    path: 'visuals',
+    component: VisualsComponent,
+    data: { title: '📊 Brew Visuals' },
+  },
+  {
+    path: 'timer',
+    component: TimerComponent,
+    data: { title: '⏱ Brewing Timer' },
+  },
+  {
+    path: 'tds-scan',
+    component: TdsScanComponent,
+    data: { title: '📷 Scan TDS' },
+  },
   { path: '**', redirectTo: '' },
 ];

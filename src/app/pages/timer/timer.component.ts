@@ -1,12 +1,19 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
+import { IonButton, IonContent, IonHeader, IonTitle } from '@ionic/angular/standalone';
+import { BottomToolbarComponent } from "../../components/bottom-toolbar/bottom-toolbar.component";
+import { HeaderComponent } from '../../components/header/header.component';
+
+const UIElements = [
+  IonContent,
+  IonButton
+]
 
 @Component({
   selector: 'app-timer',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatButtonModule],
+  imports: [CommonModule, RouterModule, ...UIElements, BottomToolbarComponent, HeaderComponent, BottomToolbarComponent],
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.scss'],
 })

@@ -9,12 +9,15 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { User } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
+import { IonicModule } from '@ionic/angular';
+import { HeaderComponent } from '../header/header.component';
+import { BottomToolbarComponent } from '../bottom-toolbar/bottom-toolbar.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IonicModule, HeaderComponent, BottomToolbarComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -31,17 +34,28 @@ export class LoginComponent {
     this.authState$ = this.authService.authState$;
   }
 
-  onLogin() {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      this.authService
-        .login(email!, password!)
-        .then(() => {
-          console.log('✅ Logged in!');
-        })
-        .catch((err) => {
-          this.error = err.message;
-        });
+  async onLogin() {
+    if (this.loginForm.invalid) return;
+
+    const { email, password } = this.loginForm.value;
+
+    try {
+      const user = await firstValueFrom(this.authState$);
+
+      if (user?.isAnonymous) {
+        // Upgrade guest
+        await this.authService.upgradeAnonymousAccount(email!, password!);
+        console.log('✨ Anonymous account upgraded');
+      } else {
+        // Normal login
+        await this.authService.login(email!, password!);
+        console.log('✅ Logged in as registered user');
+      }
+
+      this.router.navigate(['/']);
+    } catch (err: any) {
+      this.error = err.message || 'Something went wrong. Please try again.';
+      console.error('❌ Login/Upgrade failed:', err);
     }
   }
 

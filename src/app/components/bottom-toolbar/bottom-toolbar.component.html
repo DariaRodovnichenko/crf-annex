@@ -1,7 +1,9 @@
-<nav class="bottom-toolbar">
-  @for (link of navLinks; track $index) {
-  <a [routerLink]="link.path">
-    <mat-icon>{{ link.icon }}</mat-icon>
-  </a>
-  }
-</nav>
+<ion-footer>
+  <ion-tab-bar slot="bottom">
+    @for (link of navLinks; track $index) {
+    <ion-tab-button [routerLink]="link.path">
+      <ion-icon [name]="link.icon"></ion-icon>
+    </ion-tab-button>
+    }
+  </ion-tab-bar>
+</ion-footer>

@@ -1,19 +1,87 @@
-<!-- If logged in -->
-@if (authState$ | async; as user) {
-<div>
-  <p>👋 Welcome, {{ user.email || "Guest" }}</p>
-  <button (click)="onLogout()">Log Out</button>
-</div>
-} @else {
+<app-header></app-header>
 
-<!-- If logged out -->
-<form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-  <input formControlName="email" placeholder="Email" />
-  <input formControlName="password" placeholder="Password" type="password" />
-  <button type="submit">Log In</button>
+<ion-content class="ion-padding">
+  @if (authState$ | async; as user) {
+    <ion-card>
+      <ion-card-content>
+        @if (user.isAnonymous) {
+          <ion-text>
+            <p>You are currently logged in as a guest.</p>
+            <p>
+              You can upgrade to a full account by logging in with your email &
+              password below.
+            </p>
+          </ion-text>
+        } @else {
+          <p>You're logged in as <strong>{{ user.email }}</strong>.</p>
+        }
 
-  @if (error) {
-  <p>{{ error }}</p>
+        <!-- Shared Login/Upgrade Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <ion-list>
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input
+                type="password"
+                formControlName="password"
+                placeholder="Enter your password"
+              ></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <ion-button expand="block" type="submit">
+            {{ user.isAnonymous ? 'Log In / Upgrade' : 'Log In' }}
+          </ion-button>
+
+          @if (error) {
+            <ion-text color="danger">{{ error }}</ion-text>
+          }
+        </form>
+      </ion-card-content>
+    </ion-card>
+  } @else {
+    <!-- Fallback for completely unauthenticated users -->
+    <ion-card>
+      <ion-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <ion-list>
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Password</ion-label>
+              <ion-input
+                type="password"
+                formControlName="password"
+                placeholder="Enter your password"
+              ></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <ion-button expand="block" type="submit">Log In</ion-button>
+
+          @if (error) {
+            <ion-text color="danger">{{ error }}</ion-text>
+          }
+        </form>
+      </ion-card-content>
+    </ion-card>
   }
-</form>
-}
+</ion-content>
+
+<app-bottom-toolbar></app-bottom-toolbar>

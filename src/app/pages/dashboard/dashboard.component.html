@@ -1,24 +1,22 @@
-<div class="dashboard-container">
+<div>
   <h2>📈 Extraction Analysis</h2>
 
   <mat-form-field appearance="outline">
     <mat-label>Dose (g)</mat-label>
-    <input matInput class="mat-input-element" type="number" [(ngModel)]="dose" />
+    <input matInput type="number" [(ngModel)]="dose" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Yield (g)</mat-label>
-    <input matInput class="mat-input-element" type="number" [(ngModel)]="yield" />
+    <input matInput type="number" [(ngModel)]="yield" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>TDS (%)</mat-label>
-    <input matInput class="mat-input-element" type="number" [(ngModel)]="tds" step="0.01" />
+    <input matInput type="number" [(ngModel)]="tds" step="0.01" />
   </mat-form-field>
 
-  <button mat-raised-button color="primary" (click)="calculate()">
-    Calculate
-  </button>
+  <button mat-raised-button (click)="calculate()">Calculate</button>
   @if (result !== null) {
   <div>
     <p>

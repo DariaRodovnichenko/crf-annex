@@ -11,6 +11,8 @@ import {
   signOut,
   signInAnonymously,
   User,
+  EmailAuthProvider,
+  linkWithCredential,
 } from '@angular/fire/auth';
 import { map, Observable } from 'rxjs';
 import { DatabaseService } from '../data/database.service';
@@ -19,27 +21,28 @@ import { Database } from '@angular/fire/database';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private auth = inject(Auth);
-  private injector = inject(Injector);
-  private dbService = inject(DatabaseService);
-  private db = inject(Database);
+  private readonly auth = inject(Auth);
+  private readonly injector = inject(Injector);
+  private readonly dbService = inject(DatabaseService);
+  private readonly db = inject(Database);
 
   readonly authState$: Observable<User | null> = authState(this.auth);
 
   login(email: string, password: string) {
-    return runInInjectionContext(this.injector, () => {
-      return signInWithEmailAndPassword(this.auth, email, password);
-    });
+    return runInInjectionContext(this.injector, () =>
+      signInWithEmailAndPassword(this.auth, email, password)
+    );
   }
 
   async loginAnonymously() {
     return runInInjectionContext(this.injector, async () => {
       const cred = await signInAnonymously(this.auth);
-      const uid = cred.user.uid;
+      const user = cred.user;
 
-      // Check if user already exists in DB
-      const userRef = ref(this.db, `users/${uid}`);
-      const snapshot = await get(userRef);
+      if (!user) throw new Error('Anonymous sign-in failed.');
+
+      const uid = user.uid;
+      const snapshot = await get(ref(this.db, `users/${uid}`));
 
       if (!snapshot.exists()) {
         await this.dbService.saveData(`users/${uid}`, {
@@ -54,8 +57,9 @@ export class AuthService {
         console.log('👤 Guest already exists in DB');
       }
 
-      // Also log Firebase Auth user data
-      console.log('🧠 Firebase Anonymous User:', cred.user);
+      console.log('🧠 Firebase Anonymous UID:', uid);
+      console.log('🧠 Is Anonymous:', user.isAnonymous);
+      console.log('🧠 Email:', user.email);
 
       return cred;
     });
@@ -72,6 +76,48 @@ export class AuthService {
   }
 
   getUid(): Observable<string | null> {
-    return this.authState$.pipe(map((user) => user?.uid ?? null));
+    return this.authState$.pipe(
+      map((user) => {
+        console.log('🧠 getUid(): Current Firebase UID:', user?.uid);
+        return user?.uid ?? null;
+      })
+    );
+  }
+
+  async upgradeAnonymousAccount(
+    email: string,
+    password: string
+  ): Promise<void> {
+    return runInInjectionContext(this.injector, async () => {
+      const user = this.auth.currentUser;
+
+      if (!user?.isAnonymous) {
+        throw new Error('No anonymous user to upgrade.');
+      }
+
+      const credential = EmailAuthProvider.credential(email, password);
+
+      try {
+        // Try to link
+        const result = await linkWithCredential(user, credential);
+        console.log('✅ Anonymous account upgraded to:', result.user);
+
+        await this.dbService.updateData(`users/${user.uid}`, {
+          email: result.user.email,
+          role: 'registered',
+        });
+
+        console.log('📦 DB user info updated.');
+      } catch (error: any) {
+        if (error.code === 'auth/email-already-in-use') {
+          // 💡 Email exists already: fallback to normal sign-in
+          console.warn('🔁 Email already in use. Attempting regular login...');
+          await this.login(email, password);
+        } else {
+          console.error('❌ Failed to upgrade anonymous account:', error);
+          throw error;
+        }
+      }
+    });
   }
 }

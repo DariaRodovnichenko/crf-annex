@@ -1,33 +1,29 @@
-<div class="timer-container">
-  <h2>⏱ Brewing Timer</h2>
-  <div class="time-display">{{ formattedTime }}</div>
+<app-header></app-header>
+<ion-content class="ion-padding">
+  <h2>{{ formattedTime }}</h2>
 
-  <div class="controls">
-    <!-- Only show START if timer not started or paused -->
-    @if (!isRunning || (isPaused && !intervalId)) {<button
-      mat-raised-button
-      color="primary"
-      (click)="isPaused ? resumeTimer() : startTimer()"
-    >
-      Start</button
-    >}
+  <!-- Only show START if timer not started or paused -->
+  @if (!isRunning || (isPaused && !intervalId)) {<ion-button
+    expand="block"
+    (click)="isPaused ? resumeTimer() : startTimer()"
+  >
+    Start</ion-button
+  >}
 
-    <!-- Show PAUSE if running -->
-    @if (isRunning && !isPaused) {<button
-      mat-raised-button
-      color="accent"
-      (click)="pauseTimer()"
-    >
-      Pause</button
-    >}
+  <!-- Show PAUSE if running -->
+  @if (isRunning && !isPaused) {<ion-button
+    expand="block"
+    (click)="pauseTimer()"
+  >
+    Pause</ion-button
+  >}
 
-    <!-- Show STOP if paused -->
-    @if (isPaused) {<button
-      mat-raised-button
-      color="warn"
-      (click)="stopTimer()"
-    >
-      Stop</button
-    >}
-  </div>
-</div>
+  <!-- Show STOP if paused -->
+  @if (isPaused) {<ion-button
+    expand="block"
+    color="danger"
+    (click)="stopTimer()"
+    >Stop</ion-button
+  >}
+</ion-content>
+<app-bottom-toolbar></app-bottom-toolbar>
