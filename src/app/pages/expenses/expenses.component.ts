@@ -5,22 +5,36 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter, firstValueFrom } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
-// Angular Material
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButton } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatIcon } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-
 // Interfaces
 import { CoffeeLog } from '../../interfaces/log.model';
 import { Expense } from '../../interfaces/expense.model';
 
 // Services
 import { CurrencyConverterService } from '../../services/currencyApi/currency-converter.service';
+import { ExpenseService } from '../../services/expenses/expense.service';
+import { HeaderComponent } from '../../components/header/header.component';
+import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
+
+// Ionic UI Components
+import {
+  IonButton,
+  IonContent,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/angular/standalone';
+
+const UIElements = [
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonSelect,
+  IonButton,
+  IonSelectOption,
+];
 
 @Component({
   selector: 'app-expenses',
@@ -28,15 +42,11 @@ import { CurrencyConverterService } from '../../services/currencyApi/currency-co
   imports: [
     CommonModule,
     FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButton,
-    MatSelectModule,
-    MatIcon,
-    MatListModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
+    HeaderComponent,
+    BottomToolbarComponent,
+    ...UIElements,
   ],
+  host: { ngSkipHydration: '' },
   templateUrl: './expenses.component.html',
   styleUrls: ['./expenses.component.css'],
 })
@@ -45,11 +55,11 @@ export class ExpensesComponent implements OnInit {
   title: string = '';
   amount: number | null = null;
   category: 'Beans' | 'Equipment' | 'Accessories' | 'Other' = 'Beans';
-  date: string = '';
-  currency: string = 'CHF';
+  date: string = new Date().toISOString().split('T')[0];
+  currency: string = 'USD';
 
   // Currency
-  preferredCurrency: string = 'CHF';
+  preferredCurrency: string = 'USD';
   exchangeRates: { [key: string]: number } = {};
   availableCurrencies: string[] = [];
 
@@ -66,13 +76,24 @@ export class ExpensesComponent implements OnInit {
   constructor(
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private currencyService: CurrencyConverterService
+    private currencyService: CurrencyConverterService,
+    private expenseService: ExpenseService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.loadExpenses();
+    // Subscribe to expense updates
+    this.expenseService.expenses$.subscribe((expenses) => {
+      this.expenses = expenses;
+      this.applyFilters();
+    });
+
+    // Load expenses from Firebase
+    await this.expenseService.loadExpenses();
+
+    // Load logs from localStorage
     this.loadLogs();
 
+    // Load exchange rates
     try {
       const rates = await firstValueFrom(
         this.currencyService.fetchExchangeRates(this.preferredCurrency)
@@ -83,29 +104,21 @@ export class ExpensesComponent implements OnInit {
         this.currencyService.getAvailableCurrencies()
       );
       this.availableCurrencies = symbols;
+
+      // Ensure preferredCurrency (CHF) is in the list
+      if (!this.availableCurrencies.includes(this.preferredCurrency)) {
+        this.availableCurrencies.unshift(this.preferredCurrency);
+      }
     } catch (error) {
       console.error('Currency API error:', error);
     }
 
-   await firstValueFrom(
-     this.router.events.pipe(filter((event) => event instanceof NavigationEnd))
-   );
-   this.loadLogs();
-   this.cdr.detectChanges();
+    // Force change detection if needed (especially after async ops)
+    this.cdr.detectChanges();
   }
 
   loadLogs(): void {
     this.logs = JSON.parse(localStorage.getItem('coffeeLogs') || '[]');
-  }
-
-  loadExpenses(): void {
-    const stored = localStorage.getItem('expenses');
-    this.expenses = stored ? JSON.parse(stored) : [];
-    this.filteredExpenses = [...this.expenses];
-  }
-
-  saveExpenses(): void {
-    localStorage.setItem('expenses', JSON.stringify(this.expenses));
   }
 
   async addExpense(): Promise<void> {
@@ -137,22 +150,20 @@ export class ExpensesComponent implements OnInit {
       convertedCurrency: this.preferredCurrency,
     };
 
-    this.expenses.unshift(newExpense);
-    this.saveExpenses();
+    await this.expenseService.addExpense(newExpense);
     this.resetForm();
     this.applyFilters();
   }
 
-  deleteExpense(id: string): void {
-    this.expenses = this.expenses.filter((exp) => exp.id !== id);
-    this.saveExpenses();
+  async deleteExpense(id: string): Promise<void> {
+    await this.expenseService.deleteExpense(id);
     this.applyFilters();
   }
 
   resetForm(): void {
     this.title = '';
     this.amount = null;
-    this.date = '';
+    this.date = new Date().toISOString().split('T')[0];
     this.category = 'Beans';
     this.currency = this.preferredCurrency;
   }

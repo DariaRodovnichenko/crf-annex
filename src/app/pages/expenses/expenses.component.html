@@ -1,174 +1,63 @@
-<div>
-  <h2>💰 Expense Tracker</h2>
+<app-header></app-header>
+<h2>💰 Expense Tracker</h2>
 
-  <!-- Form -->
-  <div>
-    <!-- Title -->
-    <mat-form-field appearance="outline">
-      <mat-label>Title</mat-label>
-      <input matInput placeholder="e.g. Ethiopia Beans" [(ngModel)]="title" />
-    </mat-form-field>
+<ion-content class="ion-padding">
+  <!-- Title -->
+  <ion-item>
+    <ion-label position="floating">Title</ion-label>
+    <ion-input
+      [(ngModel)]="title"
+      placeholder="e.g. Ethiopia Beans"
+    ></ion-input>
+  </ion-item>
 
-    <!-- Price -->
-    <mat-form-field appearance="outline">
-      <mat-label>Price</mat-label>
-      <input matInput type="number" [(ngModel)]="amount" />
-    </mat-form-field>
+  <!-- Price -->
+  <ion-item>
+    <ion-label position="floating">Price</ion-label>
+    <ion-input type="number" [(ngModel)]="amount"></ion-input>
+  </ion-item>
 
-    <!-- Date -->
-    <mat-form-field appearance="outline">
-      <mat-label>Date</mat-label>
-      <input
-        matInput
-        [matDatepicker]="picker"
-        [(ngModel)]="date"
-        placeholder="Choose a date"
-      />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+  <!-- Date -->
+  <ion-item>
+    <ion-label position="stacked">Date</ion-label>
+    <ion-input
+      type="date"
+      [ngModel]="date"
+      (ngModelChange)="date = $event"
+      name="date"
+      required
+    ></ion-input>
+  </ion-item>
 
-    <!-- Category -->
-    <mat-form-field appearance="outline">
-      <mat-label>Category</mat-label>
-      <mat-select [(ngModel)]="category">
-        <mat-option value="Beans">Beans</mat-option>
-        <mat-option value="Equipment">Equipment</mat-option>
-        <mat-option value="Accessories">Accessories</mat-option>
-        <mat-option value="Other">Other</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <!-- Category -->
+  <ion-item>
+    <ion-label>Category</ion-label>
+    <ion-select [(ngModel)]="category">
+      <ion-select-option value="Beans">Beans</ion-select-option>
+      <ion-select-option value="Equipment">Equipment</ion-select-option>
+      <ion-select-option value="Accessories">Accessories</ion-select-option>
+      <ion-select-option value="Other">Other</ion-select-option>
+    </ion-select>
+  </ion-item>
 
-    <!-- Currency -->
-    <mat-form-field appearance="outline">
-      <mat-label>Currency</mat-label>
-      <mat-select [(ngModel)]="currency">
-        @for (currency of availableCurrencies; track currency) {<mat-option
-          [value]="currency"
-        >
-          {{ currency }} </mat-option
-        >}
-      </mat-select>
-    </mat-form-field>
-
-    <!-- Add Button -->
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="addExpense()"
-      [disabled]="!title || !amount || !date"
-    >
-      ➕ Add Expense
-    </button>
-  </div>
-
-  <!-- Divider -->
-  <hr style="margin: 24px 0; border-color: #00f6ff33" />
-
-  <!-- Expense List -->
-  @if (filteredExpenses.length > 0) {
-  <div>
-    <h3>📊 Tracked Expenses</h3>
-    <mat-list>
-      @for (expense of filteredExpenses; track expense.id) {
-      <mat-list-item>
-        <div>
-          <span>{{ expense.title }}</span>
-          <span>
-            {{ expense.convertedAmount | number : "1.2-2" }}
-            {{ preferredCurrency }}
-            <span> ({{ expense.amount }} {{ expense.originalCurrency }}) </span>
-            • {{ expense.category }} •
-            {{ expense.date | date : "mediumDate" }}
-          </span>
-          <button
-            mat-icon-button
-            (click)="deleteExpense(expense.id)"
-            aria-label="Delete expense"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </mat-list-item>
+  <!-- Currency -->
+  <ion-item>
+    <ion-label>Currency</ion-label>
+    <ion-select [(ngModel)]="currency">
+      @for (currency of availableCurrencies; track currency) {
+      <ion-select-option [value]="currency">{{ currency }}</ion-select-option>
       }
-    </mat-list>
-  </div>
-  }
+    </ion-select>
+  </ion-item>
 
-  <!-- Totals -->
-  @if (expenses.length > 0 || totalCoffeeShopCost > 0) {
-  <div>
-    <p>
-      💵 Manual Expenses:
-      <strong
-        >{{ totalManualExpenses | number : "1.2-2" }}
-        {{ preferredCurrency }}</strong
-      >
-    </p>
-    <p>
-      ☕ Coffee Shop Logs:
-      <strong
-        >{{ totalCoffeeShopCost | number : "1.2-2" }} {{ currency }}</strong
-      >
-    </p>
-    <hr />
-    <p>
-      🧾
-      <strong
-        >Total Spent: {{ grandTotal | number : "1.2-2" }} {{ currency }}</strong
-      >
-    </p>
-  </div>
-  }
+  <!-- Add Button -->
+  <ion-button
+    expand="block"
+    (click)="addExpense()"
+    [disabled]="!title || !amount || !date"
+  >
+    ➕ Add Expense
+  </ion-button>
+</ion-content>
 
-  <!-- Filters -->
-  <div>
-    <h3>🔍 Filter Expenses</h3>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Category</mat-label>
-      <mat-select [(ngModel)]="filterCategory">
-        <mat-option value="">All</mat-option>
-        <mat-option value="Beans">Beans</mat-option>
-        <mat-option value="Equipment">Equipment</mat-option>
-        <mat-option value="Accessories">Accessories</mat-option>
-        <mat-option value="Other">Other</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Start Date</mat-label>
-      <input
-        matInput
-        [matDatepicker]="startPicker"
-        [(ngModel)]="filterStartDate"
-      />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="startPicker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #startPicker></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>End Date</mat-label>
-      <input matInput [matDatepicker]="endPicker" [(ngModel)]="filterEndDate" />
-      <mat-datepicker-toggle
-        matSuffix
-        [for]="endPicker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #endPicker></mat-datepicker>
-    </mat-form-field>
-    <div>
-      <button mat-raised-button (click)="applyFilters()">
-        🔍 Apply Filters
-      </button>
-      <button mat-stroked-button (click)="resetFilters()">
-        ✖ Clear Filters
-      </button>
-      <button mat-raised-button (click)="exportToCSV()">
-        📤 Export Expenses (CSV)
-      </button>
-    </div>
-  </div>
-</div>
+<app-bottom-toolbar></app-bottom-toolbar>

@@ -2,15 +2,39 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
-
 import { GrinderSpec } from '../../interfaces/grinder.model';
 import { GrindConverterService } from '../../services/grinder/grind-converter.service';
 import { HttpClient } from '@angular/common/http';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonContent,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonSelect,
+  IonSelectOption,
+} from '@ionic/angular/standalone';
+import { HeaderComponent } from '../../components/header/header.component';
+import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
+
+const UIElements = [
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
+  IonButton,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent
+];
 
 @Component({
   selector: 'app-grinder',
@@ -19,10 +43,9 @@ import { HttpClient } from '@angular/common/http';
     CommonModule,
     FormsModule,
     RouterModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
+    ...UIElements,
+    HeaderComponent,
+    BottomToolbarComponent,
   ],
   templateUrl: './grinder.component.html',
   styleUrls: ['./grinder.component.css'],
@@ -44,6 +67,13 @@ export class GrinderComponent implements OnInit {
   ngOnInit(): void {
     this.http.get<GrinderSpec[]>('/data/grinders.json').subscribe((data) => {
       this.grinders = data;
+
+      // Set default values
+      this.fromGrinder = this.grinders[0]; 
+      this.toGrinder = this.grinders[2] ?? this.grinders[0];
+
+      // Optionally prefill a starting value
+      this.fromValue = 10;
     });
   }
 

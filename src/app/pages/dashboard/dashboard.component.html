@@ -1,30 +1,38 @@
-<div>
-  <h2>📈 Extraction Analysis</h2>
+<app-header></app-header>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Dose (g)</mat-label>
-    <input matInput type="number" [(ngModel)]="dose" />
-  </mat-form-field>
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Dose (g)</ion-label>
+    <ion-input type="number" [(ngModel)]="dose"></ion-input>
+  </ion-item>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Yield (g)</mat-label>
-    <input matInput type="number" [(ngModel)]="yield" />
-  </mat-form-field>
+  <ion-item>
+    <ion-label position="floating">Yield (g)</ion-label>
+    <ion-input type="number" [(ngModel)]="yield"></ion-input>
+  </ion-item>
 
-  <mat-form-field appearance="outline">
-    <mat-label>TDS (%)</mat-label>
-    <input matInput type="number" [(ngModel)]="tds" step="0.01" />
-  </mat-form-field>
+  <ion-item>
+    <ion-label position="floating">TDS (%)</ion-label>
+    <ion-input type="number" step="0.01" [(ngModel)]="tds"></ion-input>
+  </ion-item>
 
-  <button mat-raised-button (click)="calculate()">Calculate</button>
+  <ion-button expand="block" (click)="calculate()">Calculate</ion-button>
+
   @if (result !== null) {
-  <div>
-    <p>
-      💡 Extraction Yield: <strong>{{ result.toFixed(2) }}%</strong>
-    </p>
-    <p [style.color]="getFeedback().color">
-      {{ getFeedback().text }}
-    </p>
-  </div>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>💡 Extraction Yield</ion-card-title>
+      <ion-card-subtitle>
+        <strong>{{ result.toFixed(2) }}%</strong>
+      </ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p [style.color]="getFeedback().color">
+        {{ getFeedback().text }}
+      </p>
+    </ion-card-content>
+  </ion-card>
   }
-</div>
+</ion-content>
+
+<app-bottom-toolbar></app-bottom-toolbar>

@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
 import { DatabaseService } from '../../services/data/database.service';
 import { AuthService } from '../../services/auth/auth.service';
 import {
@@ -64,7 +67,11 @@ export class HomeComponent {
 
   features$!: Observable<any[]>;
 
-  constructor(private db: DatabaseService, private authService: AuthService) {}
+  constructor(
+    private db: DatabaseService,
+    private authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit(): void {
     this.features$ = this.authService.authState$.pipe(
@@ -90,5 +97,22 @@ export class HomeComponent {
     if (!user?.uid) return;
 
     await this.db.saveData(`users/${user.uid}/features`, updatedFeatures);
+  }
+
+  ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const el = document.activeElement as HTMLElement;
+      if (el && typeof el.blur === 'function') {
+        el.blur();
+      }
+
+      // 👇 Force focus to body (or any neutral element)
+      setTimeout(() => {
+        const safeEl = document.querySelector('body') as HTMLElement;
+        if (safeEl && typeof safeEl.focus === 'function') {
+          safeEl.focus();
+        }
+      }, 10); // small delay to avoid racing with Ionic's transition
+    }
   }
 }

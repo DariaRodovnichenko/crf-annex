@@ -1,10 +1,34 @@
+import { BottomToolbarComponent } from './../../components/bottom-toolbar/bottom-toolbar.component';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonInput,
+  IonItem,
+  IonLabel,
+} from '@ionic/angular/standalone';
+import { HeaderComponent } from '../../components/header/header.component';
+
+const UIElements = [
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonCardSubtitle,
+];
 
 @Component({
   selector: 'app-dashboard',
@@ -14,10 +38,11 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     RouterModule,
     FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+    ...UIElements,
+    HeaderComponent,
+    BottomToolbarComponent,
   ],
+  host: { ngSkipHydration: '' },
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })

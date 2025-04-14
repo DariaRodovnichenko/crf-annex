@@ -6,11 +6,55 @@ import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { User } from '@angular/fire/auth';
 import { ToastrService } from 'ngx-toastr';
+import {
+  IonCard,
+  IonCardContent,
+  IonCardTitle,
+  IonContent,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonText,
+  IonModal,
+  IonCardHeader,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonButton,
+  IonListHeader,
+} from '@ionic/angular/standalone';
+import { HeaderComponent } from '../../components/header/header.component';
+import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
+
+const UIElements = [
+  IonContent,
+  IonCard,
+  IonCardTitle,
+  IonCardContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonText,
+  IonModal,
+  IonCardHeader,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonButton,
+  IonListHeader,
+];
 
 @Component({
   selector: 'app-recipes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ...UIElements,
+    HeaderComponent,
+    BottomToolbarComponent,
+  ],
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css'],
 })

@@ -1,10 +1,20 @@
-/**
- * Ionic Dark Theme
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+:root {
+  /** ✨ Cosmic Coffee Theme **/
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+  --ion-color-primary: #8c52ff;
+  --ion-color-primary-rgb: 140, 82, 255;
+  --ion-color-secondary: #00e0ff;
+  --ion-color-secondary-rgb: 0, 224, 255;
+  --ion-color-tertiary: #ffb86b;
+  --ion-color-tertiary-rgb: 255, 184, 107;
+
+  --ion-color-success: #32e67f;
+  --ion-color-warning: #ffc409;
+  --ion-color-danger: #ff4f81;
+  --ion-color-dark: #0f0f2d;
+  --ion-color-medium: #2f2f4f;
+  --ion-color-light: #e0e7ff;
+
+  --ion-background-color: #0a0a23;
+  --ion-text-color: #ffffff;
+}

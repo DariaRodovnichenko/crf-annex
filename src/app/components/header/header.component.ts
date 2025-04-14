@@ -35,6 +35,7 @@ const UIElements = [
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, RouterModule, ...UIElements],
+  host: { ngSkipHydration: '' },
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })

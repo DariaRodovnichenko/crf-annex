@@ -1,9 +1,22 @@
-<p>More Features</p>
-<div >
-  @for (feature of allFeatures; track $index) {
-  <button mat-button [routerLink]="feature.route">
-    <mat-icon>{{ feature.icon }}</mat-icon>
-    <span>{{ feature.name }}</span>
-  </button>
-  }
-</div>
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <h2>More Features</h2>
+  <ion-grid>
+    <ion-row>
+      @for (feature of allFeatures; track $index) {
+      <ion-col size="6" size-md="4" class="ion-text-center">
+        <ion-button
+          fill="clear"
+          [routerLink]="feature.route"
+          class="feature-button"
+        >
+          <ion-icon [name]="feature.icon" size="large"></ion-icon>
+          {{ feature.name }}
+        </ion-button>
+      </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<app-bottom-toolbar></app-bottom-toolbar>

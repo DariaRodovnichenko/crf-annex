@@ -3,27 +3,22 @@
   <h2>{{ formattedTime }}</h2>
 
   <!-- Only show START if timer not started or paused -->
-  @if (!isRunning || (isPaused && !intervalId)) {<ion-button
-    expand="block"
-    (click)="isPaused ? resumeTimer() : startTimer()"
-  >
-    Start</ion-button
-  >}
+  @if (!isRunning || (isPaused && !intervalId)) {
+  <ion-button expand="block" (click)="isPaused ? resumeTimer() : startTimer()">
+    Start
+  </ion-button>
+  }
 
   <!-- Show PAUSE if running -->
-  @if (isRunning && !isPaused) {<ion-button
-    expand="block"
-    (click)="pauseTimer()"
-  >
-    Pause</ion-button
-  >}
+  @if (isRunning && !isPaused) {
+  <ion-button expand="block" (click)="pauseTimer()"> Pause </ion-button>
+  }
 
   <!-- Show STOP if paused -->
-  @if (isPaused) {<ion-button
-    expand="block"
-    color="danger"
-    (click)="stopTimer()"
-    >Stop</ion-button
-  >}
+  @if (isPaused) {
+  <ion-button expand="block" color="danger" (click)="stopTimer()">
+    Stop
+  </ion-button>
+  }
 </ion-content>
 <app-bottom-toolbar></app-bottom-toolbar>
