@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/annex-crf",
+    "public": "dist/annex-crf/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
