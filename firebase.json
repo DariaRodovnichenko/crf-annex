@@ -1,1 +1,10 @@
-{}
+{
+  "hosting": {
+    "public": "dist/annex-crf",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

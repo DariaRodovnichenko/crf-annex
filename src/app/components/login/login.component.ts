@@ -10,14 +10,25 @@ import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { User } from '@angular/fire/auth';
 import { Observable, firstValueFrom } from 'rxjs';
-import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../header/header.component';
 import { BottomToolbarComponent } from '../bottom-toolbar/bottom-toolbar.component';
+import { IonButton, IonCard, IonCardContent, IonContent, IonItem, IonLabel, IonList, IonText } from '@ionic/angular/standalone';
+
+const UIElements = [
+  IonContent,
+  IonCard,
+  IonCardContent,
+  IonText,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonButton
+]
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IonicModule, HeaderComponent, BottomToolbarComponent],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, BottomToolbarComponent, ...UIElements],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
