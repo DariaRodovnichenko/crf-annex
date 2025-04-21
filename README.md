@@ -1,59 +1,68 @@
-# AnnexCrf
+# 🔧 CRF Annex – Advanced Barista Tools
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+This is the companion project to the [Coffee Recipe Finder](https://github.com/DariaRodovnichenko/coffee-recipe-finder), built for coffee professionals who want to push the boundaries of brewing. It features **specialty tools** like grind setting converters, TDS scanning with OCR, and brewing visualizations.
 
-## Development server
+> Designed for championship-level precision ☕🌌
 
-To start a local development server, run:
+---
+
+## 🛠 Features
+
+- 🔄 **Grind Size Converter**  
+  Convert grind settings across popular grinders (e.g. Fellow Opus, Niche Zero, Lagom Mini) using real-world brew range anchors (not just micron estimates).
+
+- 📈 **Brew Visualizer**  
+  Input brew parameters and generate extraction curves (TDS, pressure, flow rate over time).
+
+- 📸 **TDS Scanner with OCR**  
+  Use your camera to scan refractometer screens, extract the TDS value, and plot results in real time.
+
+- 💰 **Expense Tracker**  
+  Track your spending on beans, equipment, and coffee-related accessories.
+
+- ⏳ **Brewing Timer Tool**  
+  Custom timers for pour-over, espresso, or any custom brew method.
+
+---
+
+## 🔍 Use Cases
+
+- Compete or train like a world-class barista
+- Log and analyze your brews with precision
+- Convert grinder settings accurately between devices
+- Save TDS readings and compare across brews
+- Track your gear and bean expenses with filters & currency conversion
+
+---
+
+## 📱 Tech Stack
+
+- **Framework**: Angular + Ionic
+- **Backend**: Firebase (Auth, Realtime DB, Firestore)
+- **Extras**:
+  - Capacitor Camera API
+  - OCR engine for TDS scanning
+  - Chart.js / ngx-charts for visual graphs
+
+---
+
+## 🚀 Live Demo
+
+[👉 View the app here](https://dariarodovnichenko.github.io/crf-annex/)
+
+---
+
+## 🧪 How to Run Locally
 
 ```bash
+# Clone the project
+git clone https://github.com/DariaRodovnichenko/crf-annex.git
+cd crf-annex
+
+# Install dependencies
+npm install
+
+# Run the app (with Vite or Angular CLI depending on setup)
+npm run dev
+# or
 ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
