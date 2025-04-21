@@ -18,8 +18,8 @@ import {
   statsChart,
   trashOutline,
   addOutline,
-  
 } from 'ionicons/icons';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 addIcons({
   person,
@@ -42,3 +42,5 @@ addIcons({
 bootstrapApplication(AppComponent, appConfig).catch((err) =>
   console.error(err)
 );
+
+defineCustomElements(window);

@@ -48,7 +48,6 @@ const UIElements = [
     BottomToolbarComponent,
     ...UIElements,
   ],
-  host: { ngSkipHydration: '' },
   templateUrl: './logs.component.html',
   styleUrls: ['./logs.component.css'],
 })

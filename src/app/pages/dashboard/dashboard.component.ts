@@ -42,7 +42,7 @@ const UIElements = [
     HeaderComponent,
     BottomToolbarComponent,
   ],
-  host: { ngSkipHydration: '' },
+ 
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })

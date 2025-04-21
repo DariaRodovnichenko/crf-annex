@@ -46,7 +46,7 @@ const UIElements = [
     BottomToolbarComponent,
     ...UIElements,
   ],
-  host: { ngSkipHydration: '' },
+ 
   templateUrl: './expenses.component.html',
   styleUrls: ['./expenses.component.css'],
 })

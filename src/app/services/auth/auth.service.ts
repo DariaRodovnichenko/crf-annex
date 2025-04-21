@@ -98,7 +98,6 @@ export class AuthService {
       const credential = EmailAuthProvider.credential(email, password);
 
       try {
-        // Try to link
         const result = await linkWithCredential(user, credential);
         console.log('✅ Anonymous account upgraded to:', result.user);
 
@@ -110,11 +109,10 @@ export class AuthService {
         console.log('📦 DB user info updated.');
       } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
-          // 💡 Email exists already: fallback to normal sign-in
           console.warn('🔁 Email already in use. Attempting regular login...');
           await this.login(email, password);
+          console.log('✅ Logged in as existing user'); // ← more accurate log
         } else {
-          console.error('❌ Failed to upgrade anonymous account:', error);
           throw error;
         }
       }

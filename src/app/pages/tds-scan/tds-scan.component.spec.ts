@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TdsScanComponent } from './tds-scan.component';
+import { TDSScanComponent } from './tds-scan.component';
 
 describe('TdsScanComponent', () => {
-  let component: TdsScanComponent;
-  let fixture: ComponentFixture<TdsScanComponent>;
+  let component: TDSScanComponent;
+  let fixture: ComponentFixture<TDSScanComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TdsScanComponent]
+      imports: [TDSScanComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TdsScanComponent);
+    fixture = TestBed.createComponent(TDSScanComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

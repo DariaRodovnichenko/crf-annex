@@ -1,2 +1,38 @@
-<h2>📈 Brew Visualizations</h2>
-<p>This page will display extraction curves and graphs.</p>
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>📊 TDS Readings History</ion-card-title>
+      <ion-card-subtitle
+        >Your recent scanned values over time</ion-card-subtitle
+      >
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Loading Spinner -->
+      @if (isLoading) {
+      <div class="ion-text-center ion-padding">
+        <ion-spinner name="dots"></ion-spinner>
+        <p>Loading your data...</p>
+      </div>
+      }
+
+      <!-- Graph Display -->
+      @else if (brewData.length > 0) { @for (point of brewData; track
+      point.timestamp) {
+      <app-tds-graph
+        [tds]="point.tds"
+        [yield]="point.yield"
+        [title]="'📈 Brew on ' + point.timestamp"
+      ></app-tds-graph>
+      } } @else {
+      <ion-label color="medium" class="ion-text-center ion-margin-top">
+        No TDS readings found yet. Start scanning to build your history!
+      </ion-label>
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<app-bottom-toolbar></app-bottom-toolbar>

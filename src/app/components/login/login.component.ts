@@ -12,7 +12,7 @@ import { User } from '@angular/fire/auth';
 import { Observable, firstValueFrom } from 'rxjs';
 import { HeaderComponent } from '../header/header.component';
 import { BottomToolbarComponent } from '../bottom-toolbar/bottom-toolbar.component';
-import { IonButton, IonCard, IonCardContent, IonContent, IonItem, IonLabel, IonList, IonText } from '@ionic/angular/standalone';
+import { IonButton, IonCard, IonCardContent, IonContent, IonInput, IonItem, IonLabel, IonList, IonText } from '@ionic/angular/standalone';
 
 const UIElements = [
   IonContent,
@@ -22,7 +22,8 @@ const UIElements = [
   IonList,
   IonItem,
   IonLabel,
-  IonButton
+  IonButton,
+  IonInput
 ]
 
 @Component({

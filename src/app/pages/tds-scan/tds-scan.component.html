@@ -1,2 +1,98 @@
-<h2>📸 Scan TDS</h2>
-<p>This will be the TDS scanning page using OCR.</p>
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>📸 Scan TDS</ion-card-title>
+      <ion-card-subtitle>
+        Use your camera to extract TDS % from a refractometer
+      </ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-button expand="block" (click)="takePhoto()">
+        📷 Take Photo
+      </ion-button>
+
+      <!-- Photo preview -->
+      @if (photo) {
+      <ion-img [src]="photo" class="ion-margin-top"></ion-img>
+      }
+
+      <!-- OCR result -->
+      @if (recognizedText) {
+      <ion-label class="ion-margin-top">
+        <strong>🧠 OCR Text:</strong> {{ recognizedText }}
+      </ion-label>
+      }
+
+      <!-- TDS Result -->
+      @if (TDSValue !== null) {
+      <ion-label class="ion-margin-top">
+        <strong>✅ TDS Value:</strong> {{ TDSValue }}%
+      </ion-label>
+      } @else if (recognizedText) {
+      <ion-label color="danger" class="ion-margin-top">
+        ❌ No valid TDS number found.
+      </ion-label>
+      } @if (!TDSValue && recognizedText) {
+      <ion-text color="warning">
+        ⚠️ No valid TDS values were found. You can try again or enter it
+        manually.
+      </ion-text>
+      }
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Chart Card -->
+  @if (showGraph && TDSValue !== null) {
+  <ion-card class="ion-padding">
+    <ion-card-header>
+      <ion-card-title>📈 Brew Profile</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <app-tds-graph
+        [tds]="TDSValue"
+        [yield]="extractionYield"
+        title="📈 Scanned Brew Result"
+      ></app-tds-graph>
+    </ion-card-content>
+  </ion-card>
+  }
+
+  <!-- Manual TDS Entry -->
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title>✍️ Manual Entry</ion-card-title>
+      <ion-card-subtitle>
+        If OCR missed it, you can type your TDS
+      </ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Enter TDS (%)</ion-label>
+        <ion-input
+          type="number"
+          [(ngModel)]="manualTDSValue"
+          inputmode="decimal"
+          placeholder="e.g. 1.35"
+          min="0.5"
+          max="25"
+          step="0.01"
+        ></ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        class="ion-margin-top"
+        (click)="applyManualTDS()"
+        [disabled]="!manualTDSValue"
+      >
+        ✅ Use This Value
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<app-bottom-toolbar></app-bottom-toolbar>

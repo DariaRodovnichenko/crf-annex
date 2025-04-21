@@ -13,7 +13,7 @@ const UIElements = [
 @Component({
   selector: 'app-bottom-toolbar',
   standalone: true,
-  host: { ngSkipHydration: 'true' },
+ 
   imports: [CommonModule, RouterModule, ...UIElements],
   templateUrl: './bottom-toolbar.component.html',
   styleUrls: ['./bottom-toolbar.component.css'],
