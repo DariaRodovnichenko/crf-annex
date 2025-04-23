@@ -93,6 +93,12 @@
       </ion-button>
     </ion-card-content>
   </ion-card>
+
+  @if (TDSValue && showGraph) {
+  <ion-button expand="block" color="primary" (click)="navigateToVisuals()"
+    >View in History 📊</ion-button
+  >
+  }
 </ion-content>
 
 <app-bottom-toolbar></app-bottom-toolbar>

@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { AuthService } from '../../services/auth/auth.service';
 import { DatabaseService } from '../../services/data/database.service';
-import { firstValueFrom } from 'rxjs';
+import { filter, firstValueFrom } from 'rxjs';
 
 import { HeaderComponent } from '../../components/header/header.component';
 import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
 import { CommonModule } from '@angular/common';
 import { TDSGraphComponent } from '../../components/tds-graph/tds-graph.component';
 import {
+  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -18,6 +19,7 @@ import {
   IonLabel,
   IonSpinner,
 } from '@ionic/angular/standalone';
+import { NavigationEnd, Router } from '@angular/router';
 
 const UIElements = [
   IonContent,
@@ -28,6 +30,7 @@ const UIElements = [
   IonCardSubtitle,
   IonSpinner,
   IonLabel,
+  IonButton,
 ];
 
 @Component({
@@ -45,28 +48,54 @@ const UIElements = [
 })
 export class VisualsComponent implements OnInit {
   isLoading = true;
-  brewData: { tds: number; yield: number; timestamp: string }[] = [];
+  brewData: { tds: number; yield: number; timestamp: string; key: string }[] =
+    [];
 
-  constructor(private auth: AuthService, private db: DatabaseService) {}
+  constructor(
+    private auth: AuthService,
+    private db: DatabaseService,
+    private router: Router
+  ) {}
 
   async ngOnInit() {
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe(() => {
+        this.loadData();
+      });
+
+    await this.loadData();
+  }
+
+  async loadData() {
+    this.isLoading = true;
     const user = await firstValueFrom(this.auth.authState$);
     if (!user) return;
 
-    const snapshot = await this.db.getData(`users/${user.uid}/tdsValues`);
-    const values = snapshot
-      ? Object.values(snapshot).sort(
-          (a: any, b: any) =>
-            new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-        )
-      : [];
+    const snapshot = await this.db.getData(`users/${user.uid}/TDSValues`);
+    const values = snapshot ?? {};
 
-    this.brewData = values.map((entry: any) => ({
-      tds: entry?.value ?? 0,
-      yield: entry?.yield ?? 18, // fallback if no yield recorded
-      timestamp: new Date(entry.timestamp).toLocaleString(),
-    }));
+    this.brewData = Object.entries(values)
+      .map(([key, entry]: [string, any]) => ({
+        tds: entry?.value ?? 0,
+        yield: entry?.yield ?? 18,
+        timestamp: new Date(entry.timestamp).toLocaleString(),
+        key,
+      }))
+      .sort(
+        (a, b) =>
+          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      );
 
     this.isLoading = false;
+  }
+
+  async removeBrew(key: string) {
+    const user = await firstValueFrom(this.auth.authState$);
+    if (!user) return;
+
+    await this.db.deleteData(`users/${user.uid}/TDSValues/${key}`);
+    this.brewData = this.brewData.filter((b) => b.key !== key);
+    console.log(`🗑️ Removed brew entry with key: ${key}`);
   }
 }

@@ -1,5 +1,19 @@
 canvas {
-  display: block;
+  /* display: block; */
   width: 100%;
   height: 100%;
+}
+
+.responsive-chart {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 200px;
+  position: relative;
+}
+
+@media (max-width: 420px) {
+  .responsive-chart {
+    aspect-ratio: 3 / 2;
+    min-height: 180px;
+  }
 }

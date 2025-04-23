@@ -1,8 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 // Interfaces
@@ -46,7 +45,7 @@ const UIElements = [
     BottomToolbarComponent,
     ...UIElements,
   ],
- 
+
   templateUrl: './expenses.component.html',
   styleUrls: ['./expenses.component.css'],
 })
@@ -74,7 +73,6 @@ export class ExpensesComponent implements OnInit {
   filterEndDate: Date | null = null;
 
   constructor(
-    private router: Router,
     private cdr: ChangeDetectorRef,
     private currencyService: CurrencyConverterService,
     private expenseService: ExpenseService

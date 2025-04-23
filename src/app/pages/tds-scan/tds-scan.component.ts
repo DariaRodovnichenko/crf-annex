@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
   IonButton,
   IonImg,
@@ -57,15 +57,38 @@ export class TDSScanComponent {
   photo?: string;
   recognizedText?: string;
   TDSValue: number | null = null;
-  extractionYield: number = 18; // Placeholder (X-axis)
+  extractionYield: number = 18;
   showGraph = false;
   manualTDSValue: number | null = null;
 
   constructor(
     private ocr: OcrService,
     private authService: AuthService,
-    private dbService: DatabaseService
+    private dbService: DatabaseService,
+    private router: Router
   ) {}
+
+  private async saveTDS(value: number) {
+    const entry = {
+      value,
+      yield: this.extractionYield,
+      timestamp: new Date().toISOString(),
+    };
+
+    const user = await firstValueFrom(this.authService.authState$);
+
+    if (user?.isAnonymous) {
+      const existing = JSON.parse(
+        localStorage.getItem('guest-tds-values') || '[]'
+      );
+      existing.push(entry);
+      localStorage.setItem('guest-tds-values', JSON.stringify(existing));
+      console.log('💾 TDS saved locally for guest');
+    } else if (user) {
+      await this.dbService.pushData(`users/${user.uid}/TDSValues`, entry);
+      console.log('✅ TDS value saved to Firebase');
+    }
+  }
 
   async takePhoto() {
     try {
@@ -89,15 +112,7 @@ export class TDSScanComponent {
           this.TDSValue = Math.max(...candidates);
           this.showGraph = true;
           console.log('📊 Graph Ready:', this.extractionYield, this.TDSValue);
-
-          const user = await firstValueFrom(this.authService.authState$);
-          if (user) {
-            await this.dbService.saveData(`users/${user.uid}/TDSValues`, {
-              value: this.TDSValue,
-              timestamp: new Date().toISOString(),
-            });
-            console.log('✅ TDS value saved to Firebase');
-          }
+          await this.saveTDS(this.TDSValue);
         } else {
           this.TDSValue = null;
           this.showGraph = false;
@@ -111,7 +126,7 @@ export class TDSScanComponent {
     }
   }
 
-  applyManualTDS() {
+  async applyManualTDS() {
     if (
       this.manualTDSValue !== null &&
       this.manualTDSValue >= 0.5 &&
@@ -120,6 +135,11 @@ export class TDSScanComponent {
       this.TDSValue = this.manualTDSValue;
       this.showGraph = true;
       console.log('✅ Manual TDS applied:', this.TDSValue);
+      await this.saveTDS(this.TDSValue);
     }
+  }
+
+  navigateToVisuals() {
+    this.router.navigate(['/visuals']);
   }
 }

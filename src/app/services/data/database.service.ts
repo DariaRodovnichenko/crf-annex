@@ -11,6 +11,7 @@ import {
   set,
   update,
   remove,
+  push,
 } from '@angular/fire/database';
 
 @Injectable({ providedIn: 'root' })
@@ -48,6 +49,13 @@ export class DatabaseService {
       const dataRef = ref(this.db, path);
       const snapshot = await get(dataRef);
       return snapshot.exists() ? snapshot.val() : null;
+    });
+  }
+
+  async pushData(path: string, data: any): Promise<any> {
+    return runInInjectionContext(this.injector, () => {
+      const listRef = ref(this.db, path);
+      return push(listRef, data);
     });
   }
 

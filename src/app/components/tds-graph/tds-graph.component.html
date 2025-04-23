@@ -3,11 +3,13 @@
     <ion-card-title>{{ title }}</ion-card-title>
   </ion-card-header>
   <ion-card-content>
-    <canvas
-      baseChart
-      [data]="scatterChartData"
-      [options]="scatterChartOptions"
-      [type]="'scatter'"
-    ></canvas>
+    <div class="responsive-chart">
+      <canvas
+        baseChart
+        [data]="scatterChartData"
+        [options]="scatterChartOptions"
+        [type]="'scatter'"
+      ></canvas>
+    </div>
   </ion-card-content>
 </ion-card>

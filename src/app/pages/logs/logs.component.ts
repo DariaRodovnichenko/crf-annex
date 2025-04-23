@@ -20,7 +20,8 @@ import {
   IonSelect,
   IonSelectOption,
 } from '@ionic/angular/standalone';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { AuthService } from '../../services/auth/auth.service';
 
 const UIElements = [
   IonContent,
@@ -53,6 +54,7 @@ const UIElements = [
 })
 export class LogsComponent implements OnInit {
   private readonly logService = inject(CoffeeLogService);
+  private readonly authService = inject(AuthService);
 
   logs$ = new BehaviorSubject<CoffeeLog[]>([]);
   selectedDate: string = new Date().toISOString().split('T')[0];
@@ -72,7 +74,20 @@ export class LogsComponent implements OnInit {
 
   async loadLogs() {
     try {
-      const allLogs = await this.logService.getUserLogs();
+      const user = await firstValueFrom(this.authService.authState$);
+      let allLogs: CoffeeLog[] = [];
+
+      if (user?.isAnonymous) {
+        const localLogs = JSON.parse(
+          localStorage.getItem('guest-logs') || '[]'
+        );
+        allLogs = localLogs;
+        console.log('📄 Loaded logs from localStorage (guest)');
+      } else {
+        allLogs = await this.logService.getUserLogs();
+        console.log('📄 Loaded logs from Firebase');
+      }
+
       const filtered = allLogs.filter((log) => log.date === this.selectedDate);
       this.logs$.next(filtered);
     } catch (error) {
@@ -85,8 +100,6 @@ export class LogsComponent implements OnInit {
   }
 
   async onSubmit() {
-    console.log('📤 Attempting to submit new log:', this.newLog);
-
     if (
       !this.newLog.date ||
       this.newLog.gramsUsed <= 0 ||
@@ -103,18 +116,39 @@ export class LogsComponent implements OnInit {
     this.newLog.id = crypto.randomUUID();
 
     try {
-      await this.logService.addUserLog(this.newLog);
-      console.log('✅ Log submitted:', this.newLog);
+      const user = await firstValueFrom(this.authService.authState$);
+      if (user?.isAnonymous) {
+        const localLogs = JSON.parse(
+          localStorage.getItem('guest-logs') || '[]'
+        );
+        localLogs.push(this.newLog);
+        localStorage.setItem('guest-logs', JSON.stringify(localLogs));
+        console.log('💾 Guest log saved locally');
+      } else {
+        await this.logService.addUserLog(this.newLog);
+        console.log('✅ Log saved to Firebase');
+      }
+
       await this.loadLogs();
       this.resetForm();
     } catch (err) {
-      console.error('❌ Failed to write log to Firebase:', err);
+      console.error('❌ Failed to save log:', err);
     }
   }
 
   async onDeleteLog(log: CoffeeLog) {
     try {
-      await this.logService.deleteUserLog(log.id);
+      const user = await firstValueFrom(this.authService.authState$);
+      if (user?.isAnonymous) {
+        const logs = JSON.parse(localStorage.getItem('guest-logs') || '[]');
+        const updated = logs.filter((l: CoffeeLog) => l.id !== log.id);
+        localStorage.setItem('guest-logs', JSON.stringify(updated));
+        console.log('🗑️ Guest log removed locally');
+      } else {
+        await this.logService.deleteUserLog(log.id);
+        console.log('🗑️ Log removed from Firebase');
+      }
+
       await this.loadLogs();
     } catch (error) {
       console.error('❌ Failed to delete log:', error);
