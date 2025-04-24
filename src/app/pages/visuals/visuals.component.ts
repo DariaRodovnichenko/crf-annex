@@ -58,13 +58,13 @@ export class VisualsComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.router.events
-      .pipe(filter((e) => e instanceof NavigationEnd))
-      .subscribe(() => {
-        this.loadData();
-      });
+    this.router.events.forEach(async (e) => {
+      if (e instanceof NavigationEnd) {
+        await this.loadData();
+      }
+    });
 
-    await this.loadData();
+    await this.loadData(); // Initial load
   }
 
   async loadData() {
@@ -72,20 +72,36 @@ export class VisualsComponent implements OnInit {
     const user = await firstValueFrom(this.auth.authState$);
     if (!user) return;
 
-    const snapshot = await this.db.getData(`users/${user.uid}/TDSValues`);
-    const values = snapshot ?? {};
+    let entries: any[] = [];
 
-    this.brewData = Object.entries(values)
-      .map(([key, entry]: [string, any]) => ({
+    if (user.isAnonymous) {
+      console.log('👻 Guest detected — loading TDS from localStorage');
+      const localData = localStorage.getItem('guest-tds-values');
+      entries = localData ? JSON.parse(localData) : [];
+      this.brewData = entries.map((entry, index) => ({
         tds: entry?.value ?? 0,
         yield: entry?.yield ?? 18,
         timestamp: new Date(entry.timestamp).toLocaleString(),
-        key,
-      }))
-      .sort(
-        (a, b) =>
-          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+        key: `${index}`,
+      }));
+    } else {
+      console.log('✅ Registered user — loading TDS from Firebase');
+      const snapshot = await this.db.getData(`users/${user.uid}/TDSValues`);
+      const firebaseData = snapshot ?? {};
+      this.brewData = Object.entries(firebaseData).map(
+        ([key, entry]: [string, any]) => ({
+          tds: entry?.value ?? 0,
+          yield: entry?.yield ?? 18,
+          timestamp: new Date(entry.timestamp).toLocaleString(),
+          key,
+        })
       );
+    }
+
+    this.brewData.sort(
+      (a, b) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
 
     this.isLoading = false;
   }
@@ -94,8 +110,16 @@ export class VisualsComponent implements OnInit {
     const user = await firstValueFrom(this.auth.authState$);
     if (!user) return;
 
-    await this.db.deleteData(`users/${user.uid}/TDSValues/${key}`);
-    this.brewData = this.brewData.filter((b) => b.key !== key);
-    console.log(`🗑️ Removed brew entry with key: ${key}`);
+    if (user.isAnonymous) {
+      const data = JSON.parse(localStorage.getItem('guest-tds-values') || '[]');
+      data.splice(Number(key), 1);
+      localStorage.setItem('guest-tds-values', JSON.stringify(data));
+      this.brewData = this.brewData.filter((_, i) => i.toString() !== key);
+      console.log(`🗑️ Removed local guest brew entry at index: ${key}`);
+    } else {
+      await this.db.deleteData(`users/${user.uid}/TDSValues/${key}`);
+      this.brewData = this.brewData.filter((b) => b.key !== key);
+      console.log(`🗑️ Removed brew entry with key: ${key}`);
+    }
   }
 }

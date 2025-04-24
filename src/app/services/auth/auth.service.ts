@@ -14,7 +14,7 @@ import {
   EmailAuthProvider,
   linkWithCredential,
 } from '@angular/fire/auth';
-import { map, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 import { DatabaseService } from '../data/database.service';
 import { SyncService } from '../sync/sync.service';
 
@@ -74,27 +74,36 @@ export class AuthService {
       if (!user?.isAnonymous) throw new Error('No anonymous user to upgrade.');
 
       const credential = EmailAuthProvider.credential(email, password);
+
       try {
         const result = await linkWithCredential(user, credential);
+        console.log('✅ Anonymous account upgraded to:', result.user);
+
         await this.dbService.updateData(`users/${user.uid}`, {
           email: result.user.email,
           role: 'registered',
         });
-        console.log('📦 DB user info updated.');
 
-        // Sync
-        await this.syncService.syncLocalDataToFirebase(result.user.uid);
-
-        console.log('📦 DB user info updated & guest data synced');
+        // Sync local data after upgrade
+        await this.syncService.syncLocalDataToFirebase(user.uid);
       } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
-          await this.login(email, password);
-          const currentUser = this.auth.currentUser;
-          if (currentUser) {
-            await this.syncService.syncLocalDataToFirebase(currentUser.uid);
-            console.log('✅ Logged in and synced to existing user');
+          // 🧘 Suppress error and switch to regular login
+          console.warn(
+            '🔁 Email already in use. Switching to login silently...'
+          );
+          try {
+            await this.login(email, password);
+            const uid = (await firstValueFrom(this.authState$))?.uid;
+            if (uid) {
+              await this.syncService.syncLocalDataToFirebase(uid);
+              console.log('✅ Logged in and synced to existing user');
+            }
+          } catch (loginErr) {
+            console.error('❌ Fallback login failed', loginErr);
           }
         } else {
+          console.error('❌ Upgrade failed unexpectedly:', error);
           throw error;
         }
       }

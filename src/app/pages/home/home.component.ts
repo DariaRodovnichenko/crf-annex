@@ -106,13 +106,15 @@ export class HomeComponent {
         el.blur();
       }
 
-      // 👇 Force focus to body (or any neutral element)
+      // Force focus to body (or any neutral element)
       setTimeout(() => {
         const safeEl = document.querySelector('body') as HTMLElement;
         if (safeEl && typeof safeEl.focus === 'function') {
           safeEl.focus();
         }
-      }, 10); // small delay to avoid racing with Ionic's transition
+      }, 10);
     }
   }
+
+  
 }

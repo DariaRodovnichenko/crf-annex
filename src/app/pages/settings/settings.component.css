@@ -1,0 +1,7 @@
+.settings-avatar {
+  margin: 16px auto;
+  width: 96px;
+  height: 96px;
+  border: 2px solid var(--ion-color-medium);
+  overflow: hidden;
+}

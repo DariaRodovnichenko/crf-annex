@@ -1,5 +1,14 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
+// Components
+import { HeaderComponent } from './../../components/header/header.component';
+import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
+import { TDSGraphComponent } from '../../components/tds-graph/tds-graph.component';
+
+// Ionic
 import {
   IonButton,
   IonImg,
@@ -14,15 +23,13 @@ import {
   IonItem,
   IonInput,
 } from '@ionic/angular/standalone';
-import { HeaderComponent } from './../../components/header/header.component';
-import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
+
+// Services
 import { OcrService } from '../../services/ocr/ocr.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { DatabaseService } from '../../services/data/database.service';
-import { firstValueFrom } from 'rxjs';
-import { TDSGraphComponent } from '../../components/tds-graph/tds-graph.component';
-import { FormsModule } from '@angular/forms';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
+import { TDSService } from '../../services/tds/tds.service';
 
 const UIElements = [
   IonContent,
@@ -65,30 +72,9 @@ export class TDSScanComponent {
     private ocr: OcrService,
     private authService: AuthService,
     private dbService: DatabaseService,
-    private router: Router
+    private router: Router,
+    private tdsService: TDSService
   ) {}
-
-  private async saveTDS(value: number) {
-    const entry = {
-      value,
-      yield: this.extractionYield,
-      timestamp: new Date().toISOString(),
-    };
-
-    const user = await firstValueFrom(this.authService.authState$);
-
-    if (user?.isAnonymous) {
-      const existing = JSON.parse(
-        localStorage.getItem('guest-tds-values') || '[]'
-      );
-      existing.push(entry);
-      localStorage.setItem('guest-tds-values', JSON.stringify(existing));
-      console.log('💾 TDS saved locally for guest');
-    } else if (user) {
-      await this.dbService.pushData(`users/${user.uid}/TDSValues`, entry);
-      console.log('✅ TDS value saved to Firebase');
-    }
-  }
 
   async takePhoto() {
     try {
@@ -112,7 +98,10 @@ export class TDSScanComponent {
           this.TDSValue = Math.max(...candidates);
           this.showGraph = true;
           console.log('📊 Graph Ready:', this.extractionYield, this.TDSValue);
-          await this.saveTDS(this.TDSValue);
+          await this.tdsService.saveTDSValue(
+            this.TDSValue,
+            this.extractionYield
+          );
         } else {
           this.TDSValue = null;
           this.showGraph = false;
@@ -135,7 +124,7 @@ export class TDSScanComponent {
       this.TDSValue = this.manualTDSValue;
       this.showGraph = true;
       console.log('✅ Manual TDS applied:', this.TDSValue);
-      await this.saveTDS(this.TDSValue);
+      await this.tdsService.saveTDSValue(this.TDSValue, this.extractionYield);
     }
   }
 

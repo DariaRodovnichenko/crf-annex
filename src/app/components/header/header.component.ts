@@ -17,8 +17,11 @@ import {
   IonIcon,
   IonImg,
   IonTitle,
+  IonAvatar,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { filter, map, startWith } from 'rxjs';
+import { SettingsComponent } from '../../pages/settings/settings.component';
 
 const UIElements = [
   IonHeader,
@@ -29,28 +32,31 @@ const UIElements = [
   IonIcon,
   IonImg,
   IonTitle,
+  IonAvatar,
 ];
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule, RouterModule, ...UIElements],
- 
+
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
+  constructor(private modalCtrl: ModalController) {}
+
   private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
   authState$ = this.authService.authState$;
 
-  // ✅ Icon SVGs
+  // Icon SVGs
   personIcon = person;
   logoutIcon = logOut;
 
-  // ✅ Observable for title, for use with `| async`
+  // Observable for title, for use with `| async`
   pageTitle$ = this.router.events.pipe(
     filter((event): event is NavigationEnd => event instanceof NavigationEnd),
     map(() => {
@@ -63,7 +69,10 @@ export class HeaderComponent {
     startWith('')
   );
 
-  logout() {
-    this.authService.logout();
+  async openSettings() {
+    const modal = await this.modalCtrl.create({
+      component: SettingsComponent,
+    });
+    await modal.present();
   }
 }

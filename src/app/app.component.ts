@@ -1,3 +1,4 @@
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterModule, Router, NavigationStart } from '@angular/router';
@@ -21,20 +22,18 @@ export class AppComponent implements OnInit {
   constructor() {
     // Auto-blur focused element on every route transition
     this.router.events
-      .pipe(filter((e) => e instanceof NavigationStart))
+      .pipe(
+        filter((e) => e instanceof NavigationStart),
+        takeUntilDestroyed()
+      )
       .subscribe(() => {
         setTimeout(() => {
           const el = document.activeElement as HTMLElement;
-          if (el && typeof el.blur === 'function') {
-            el.blur();
-            console.log('👁️‍🗨️ Blurred during route transition:', el);
-          }
+          if (el?.blur) el.blur();
 
           const body = document.querySelector('body') as HTMLElement;
-          if (body && typeof body.focus === 'function') {
-            body.focus();
-          }
-        }, 0);
+          if (body?.focus) body.focus();
+        });
       });
   }
 

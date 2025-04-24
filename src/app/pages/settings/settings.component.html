@@ -1,1 +1,85 @@
-<p>settings works!</p>
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-content class="ion-text-center">
+      <!-- Avatar Preview -->
+      <ion-avatar class="settings-avatar">
+        <img
+          [src]="
+            avatarPreview ||
+            'https://api.dicebear.com/7.x/bottts/svg?seed=default'
+          "
+        />
+      </ion-avatar>
+
+      <!-- Generate Random Avatar -->
+      <ion-button expand="block" fill="outline" (click)="useRandomAvatar()">
+        🎲 Generate Random Avatar
+      </ion-button>
+
+      <!-- Save Avatar -->
+      <ion-button expand="block" color="success" (click)="saveAvatar()">
+        Save Avatar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <!-- Username -->
+      <ion-item>
+        <ion-label position="floating">Username</ion-label>
+        <ion-input [(ngModel)]="username"></ion-input>
+      </ion-item>
+      <ion-button expand="block" (click)="saveUsername()"
+        >Save Username</ion-button
+      >
+
+      <!-- Password Change -->
+      <ion-item>
+        <ion-label position="floating">Current Password</ion-label>
+        <ion-input type="password" [(ngModel)]="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">New Password</ion-label>
+        <ion-input type="password" [(ngModel)]="newPassword"></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" color="warning" (click)="changePassword()">
+        Change Password
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Theme Toggle -->
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>🌗 Light Theme</ion-label>
+        <ion-toggle
+          [checked]="themeLight"
+          (ionChange)="toggleTheme($event)"
+        ></ion-toggle>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  @if (isGuest) {
+  <ion-card>
+    <ion-card-content>
+      <ion-button expand="block" (click)="goToLogin()">
+        🔐 Sign In or Create Account
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+  } @else {
+  <ion-button expand="block" color="danger" (click)="logout()">
+    Log Out
+  </ion-button>
+  }
+
+  <!-- Close Button -->
+  <ion-button expand="block" fill="clear" color="medium" (click)="close()">
+    Close Settings
+  </ion-button>
+</ion-content>
