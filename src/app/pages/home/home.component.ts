@@ -1,41 +1,34 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-
-import { DatabaseService } from '../../services/data/database.service';
-import { AuthService } from '../../services/auth/auth.service';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import {
+  BehaviorSubject,
   firstValueFrom,
   from,
-  map,
-  Observable,
   of,
   switchMap,
   tap,
 } from 'rxjs';
-import { HeaderComponent } from '../../components/header/header.component';
-import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
+
+import { DatabaseService } from '../../services/data/database.service';
+import { AuthService } from '../../services/auth/auth.service';
+
 import {
   IonCard,
   IonCardContent,
-  IonCol,
   IonContent,
   IonGrid,
-  IonIcon,
   IonRow,
+  IonCol,
+  IonIcon,
+  IonButton,
+  IonReorderGroup,
+  IonReorder,
+  ItemReorderEventDetail,
 } from '@ionic/angular/standalone';
 
-const UIElements = [
-  IonContent,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonCard,
-  IonCardContent,
-  IonIcon,
-];
+import { HeaderComponent } from '../../components/header/header.component';
+import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
 
 @Component({
   selector: 'app-home',
@@ -43,7 +36,16 @@ const UIElements = [
   imports: [
     CommonModule,
     RouterModule,
-    ...UIElements,
+    IonCard,
+    IonCardContent,
+    IonContent,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonIcon,
+    IonButton,
+    IonReorderGroup,
+    IonReorder,
     HeaderComponent,
     BottomToolbarComponent,
   ],
@@ -65,56 +67,76 @@ export class HomeComponent {
     { id: 6, name: 'More', icon: 'apps', route: '/more' },
   ];
 
-  features$!: Observable<any[]>;
+  features$ = new BehaviorSubject<any[]>([]);
+  isReordering = false;
 
   constructor(
+    private router: Router,
     private db: DatabaseService,
     private authService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
+  goToRoute(path: string) {
+    this.router.navigate([path]);
+  }
+
   ngOnInit(): void {
-    this.features$ = this.authService.authState$.pipe(
-      switchMap((user) => {
-        if (!user?.uid) return of(this.defaultFeatures);
+    this.authService.authState$
+      .pipe(
+        switchMap((user) => {
+          if (!user?.uid) {
+            this.features$.next(this.defaultFeatures);
+            return of(null);
+          }
 
-        const userPath = `users/${user.uid}/features`;
+          const userPath = `users/${user.uid}/features`;
 
-        return from(this.db.getData(userPath)).pipe(
-          map((data) => data ?? this.defaultFeatures),
-          tap(async (data) => {
-            if (!data) {
-              await this.db.saveData(userPath, this.defaultFeatures);
-            }
-          })
-        );
-      })
-    );
+          return from(this.db.getData(userPath)).pipe(
+            tap(async (data) => {
+              const features = data ?? this.defaultFeatures;
+              this.features$.next(features);
+
+              if (!data) {
+                await this.db.saveData(userPath, this.defaultFeatures);
+              }
+            })
+          );
+        })
+      )
+      .subscribe();
   }
 
   async saveUserFeatures(updatedFeatures: any[]) {
     const user = await firstValueFrom(this.authService.authState$);
-    if (!user?.uid) return;
+    if (user?.uid) {
+      await this.db.saveData(`users/${user.uid}/features`, updatedFeatures);
+    }
+  }
 
-    await this.db.saveData(`users/${user.uid}/features`, updatedFeatures);
+  async doReorder(event: CustomEvent<ItemReorderEventDetail>) {
+    const from = event.detail.from;
+    const to = event.detail.to;
+
+    const updated = [...this.features$.value];
+    const moved = updated.splice(from, 1)[0];
+    updated.splice(to, 0, moved);
+
+    this.features$.next(updated);
+    event.detail.complete();
+
+    await this.saveUserFeatures(updated);
   }
 
   ngOnDestroy(): void {
     if (isPlatformBrowser(this.platformId)) {
       const el = document.activeElement as HTMLElement;
-      if (el && typeof el.blur === 'function') {
-        el.blur();
-      }
+      if (el?.blur) el.blur();
 
-      // Force focus to body (or any neutral element)
       setTimeout(() => {
         const safeEl = document.querySelector('body') as HTMLElement;
-        if (safeEl && typeof safeEl.focus === 'function') {
-          safeEl.focus();
-        }
+        safeEl?.focus?.();
       }, 10);
     }
   }
-
-  
 }

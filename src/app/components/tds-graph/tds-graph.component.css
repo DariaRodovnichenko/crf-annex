@@ -4,6 +4,10 @@ canvas {
   height: 100%;
 }
 
+
+
+/* 
+
 .responsive-chart {
   width: 100%;
   aspect-ratio: 4 / 3;
@@ -16,4 +20,4 @@ canvas {
     aspect-ratio: 3 / 2;
     min-height: 180px;
   }
-}
+} */

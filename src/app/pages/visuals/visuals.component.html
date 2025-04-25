@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<ion-content class="ion-padding">
+<ion-content>
   <ion-card>
     <ion-card-header>
       <ion-card-title>📊 TDS Readings History</ion-card-title>
@@ -9,46 +9,45 @@
       >
     </ion-card-header>
 
-    <ion-card-content>
+    <ion-card-content class="chart">
       <!-- Loading Spinner -->
       @if (isLoading) {
-      <div class="ion-text-center ion-padding">
+      <div class="ion-text-center">
         <ion-spinner name="dots"></ion-spinner>
         <p>Loading your data...</p>
       </div>
       }
 
       <!-- Graph Display -->
-      @else if (brewData.length > 0) {
-        @for (point of brewData; track point.key) {
-          <ion-card class="ion-margin-bottom">
-            <ion-card-header>
-              <ion-card-title>📈 Brew on {{ point.timestamp }}</ion-card-title>
-            </ion-card-header>
+      @else if (brewData.length > 0) { @for (point of brewData; track point.key)
+      {
+      <ion-card class="ion-margin-bottom">
+        <ion-card-header>
+          <ion-card-title>📈 Brew on {{ point.timestamp }}</ion-card-title>
+        </ion-card-header>
 
-            <ion-card-content>
-              <app-tds-graph
-                [tds]="point.tds"
-                [yield]="point.yield"
-                [title]="'TDS Graph'"
-              ></app-tds-graph>
+        <ion-card-content class="chart">
+          <app-tds-graph
+            [tds]="point.tds"
+            [yield]="point.yield"
+            [title]="'TDS Graph'"
+          ></app-tds-graph>
 
-              <ion-button
-                expand="block"
-                color="danger"
-                fill="outline"
-                class="ion-margin-top"
-                (click)="removeBrew(point.key)"
-              >
-                🗑️ Delete Entry
-              </ion-button>
-            </ion-card-content>
-          </ion-card>
-        }
-      } @else {
-        <ion-label color="medium" class="ion-text-center ion-margin-top">
-          No TDS readings found yet. Start scanning to build your history!
-        </ion-label>
+          <ion-button
+            expand="block"
+            color="danger"
+            fill="outline"
+            class="ion-margin-top"
+            (click)="removeBrew(point.key)"
+          >
+            🗑️ Delete Entry
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+      } } @else {
+      <ion-label color="medium" class="ion-text-center ion-margin-top">
+        No TDS readings found yet. Start scanning to build your history!
+      </ion-label>
       }
     </ion-card-content>
   </ion-card>

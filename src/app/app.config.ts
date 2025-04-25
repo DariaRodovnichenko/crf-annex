@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideDatabase(() => getDatabase()),
     provideAuth(() => getAuth()),
-    provideIonicAngular({}),
+    provideIonicAngular({mode: 'md'}),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
