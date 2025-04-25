@@ -1,35 +1,29 @@
 <app-header></app-header>
 
 <ion-content class="ion-padding">
-  <ion-button expand="block" (click)="isReordering = !isReordering">
-    {{ isReordering ? "✅ Done" : "✏️ Reorder Features" }}
-  </ion-button>
-
-  <ion-reorder-group
-    [disabled]="!isReordering"
-    (ionItemReorder)="doReorder($any($event))"
-  >
-    <ion-grid>
-      <ion-row>
-        @if (features$ | async; as features) { @for (feature of features; track
-        feature.id) {
-        <ion-col size="6" size-md="4" class="ion-text-center">
-          <ion-card
-            class="feature-card"
-            (click)="!isReordering && goToRoute(feature.route)"
-          >
-            <ion-reorder slot="start"></ion-reorder>
-            <!-- not wrapping -->
-            <ion-card-content>
-              <ion-icon [name]="feature.icon" size="large"></ion-icon>
-              <p>{{ feature.name }}</p>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        } }
-      </ion-row>
-    </ion-grid>
-  </ion-reorder-group>
+  <ion-grid>
+    <ion-row>
+      @if (features$ | async; as features) {
+        @for (feature of features; track feature.id) {
+          <ion-col size="6" size-md="4" class="ion-text-center">
+            <ion-button
+              fill="clear"
+              expand="block"
+              [routerLink]="feature.route"
+              class="feature-button"
+            >
+              <ion-card tabindex="-1" inert>
+                <ion-card-content>
+                  <ion-icon [name]="feature.icon" size="large"></ion-icon>
+                  <p>{{ feature.name }}</p>
+                </ion-card-content>
+              </ion-card>
+            </ion-button>
+          </ion-col>
+        }
+      }
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <app-bottom-toolbar></app-bottom-toolbar>

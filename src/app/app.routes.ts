@@ -6,11 +6,12 @@ import { MoreComponent } from './pages/more/more.component';
 import { VisualsComponent } from './pages/visuals/visuals.component';
 import { TimerComponent } from './pages/timer/timer.component';
 import { ExpensesComponent } from './pages/expenses/expenses.component';
-import { RecipesComponent } from './pages/recipes/recipes.component';
+import { FavoritesComponent } from './pages/favorites/favorites.component';
 import { TDSScanComponent } from './pages/tds-scan/tds-scan.component';
 import { GrinderComponent } from './pages/grinder/grinder.component';
 import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { RecipesComponent } from './pages/recipes/recipes.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, data: { title: '🏠 Home' } },
@@ -42,7 +43,7 @@ export const routes: Routes = [
   },
   {
     path: 'favorites',
-    component: RecipesComponent,
+    component: FavoritesComponent,
     data: { title: '❤️ Saved Recipes' },
   },
   {
@@ -59,6 +60,11 @@ export const routes: Routes = [
     path: 'tds-scan',
     component: TDSScanComponent,
     data: { title: '📷 Scan TDS' },
+  },
+  {
+    path: 'recipes',
+    component: RecipesComponent,
+    data: { title: '📝 Recipes' },
   },
   { path: '**', redirectTo: '' },
 ];

@@ -1,34 +1,31 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import {
-  BehaviorSubject,
-  firstValueFrom,
-  from,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-import { DatabaseService } from '../../services/data/database.service';
-import { AuthService } from '../../services/auth/auth.service';
-
+import { HeaderComponent } from '../../components/header/header.component';
+import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
 import {
+  IonButton,
   IonCard,
   IonCardContent,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonIcon,
+  IonRow,
+} from '@ionic/angular/standalone';
+
+const UIElements = [
   IonContent,
   IonGrid,
   IonRow,
   IonCol,
-  IonIcon,
   IonButton,
-  IonReorderGroup,
-  IonReorder,
-  ItemReorderEventDetail,
-} from '@ionic/angular/standalone';
-
-import { HeaderComponent } from '../../components/header/header.component';
-import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-toolbar.component';
+  IonCard,
+  IonCardContent,
+  IonIcon,
+];
 
 @Component({
   selector: 'app-home',
@@ -36,18 +33,9 @@ import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-t
   imports: [
     CommonModule,
     RouterModule,
-    IonCard,
-    IonCardContent,
-    IonContent,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonIcon,
-    IonButton,
-    IonReorderGroup,
-    IonReorder,
     HeaderComponent,
     BottomToolbarComponent,
+    ...UIElements,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
@@ -67,13 +55,11 @@ export class HomeComponent {
     { id: 6, name: 'More', icon: 'apps', route: '/more' },
   ];
 
-  features$ = new BehaviorSubject<any[]>([]);
-  isReordering = false;
+  // Use a BehaviorSubject so the template can subscribe to it
+  features$ = new BehaviorSubject<any[]>(this.defaultFeatures);
 
   constructor(
     private router: Router,
-    private db: DatabaseService,
-    private authService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -82,57 +68,17 @@ export class HomeComponent {
   }
 
   ngOnInit(): void {
-    this.authService.authState$
-      .pipe(
-        switchMap((user) => {
-          if (!user?.uid) {
-            this.features$.next(this.defaultFeatures);
-            return of(null);
-          }
-
-          const userPath = `users/${user.uid}/features`;
-
-          return from(this.db.getData(userPath)).pipe(
-            tap(async (data) => {
-              const features = data ?? this.defaultFeatures;
-              this.features$.next(features);
-
-              if (!data) {
-                await this.db.saveData(userPath, this.defaultFeatures);
-              }
-            })
-          );
-        })
-      )
-      .subscribe();
-  }
-
-  async saveUserFeatures(updatedFeatures: any[]) {
-    const user = await firstValueFrom(this.authService.authState$);
-    if (user?.uid) {
-      await this.db.saveData(`users/${user.uid}/features`, updatedFeatures);
-    }
-  }
-
-  async doReorder(event: CustomEvent<ItemReorderEventDetail>) {
-    const from = event.detail.from;
-    const to = event.detail.to;
-
-    const updated = [...this.features$.value];
-    const moved = updated.splice(from, 1)[0];
-    updated.splice(to, 0, moved);
-
-    this.features$.next(updated);
-    event.detail.complete();
-
-    await this.saveUserFeatures(updated);
+    // We no longer interact with the Database or AuthService for feature order.
+    // Every user simply gets the default layout:
+    this.features$.next(this.defaultFeatures);
   }
 
   ngOnDestroy(): void {
     if (isPlatformBrowser(this.platformId)) {
       const el = document.activeElement as HTMLElement;
-      if (el?.blur) el.blur();
-
+      if (el?.blur) {
+        el.blur();
+      }
       setTimeout(() => {
         const safeEl = document.querySelector('body') as HTMLElement;
         safeEl?.focus?.();
