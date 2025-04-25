@@ -19,5 +19,9 @@ export class RecipeService {
     return this.dbService.removeFromFavorites(uid, recipeId);
   }
 
-  // Later: getWorldRecipes(), getRecipeById(id), searchRecipes(), etc.
+  async getWorldRecipes(): Promise<any[]> {
+    const data = await this.dbService.getData('recipes');
+    if (!data) return [];
+    return Object.keys(data).map((id) => ({ id, ...data[id] }));
+  }
 }

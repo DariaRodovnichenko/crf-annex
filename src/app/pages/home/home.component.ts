@@ -52,7 +52,8 @@ export class HomeComponent {
     },
     { id: 4, name: 'Expenses', icon: 'cash', route: '/expenses' },
     { id: 5, name: 'Saved Recipes', icon: 'heart', route: '/favorites' },
-    { id: 6, name: 'More', icon: 'apps', route: '/more' },
+    { id: 6, name: 'Recipes', icon: 'list', route: '/recipes' },
+    { id: 7, name: 'More', icon: 'apps', route: '/more' },
   ];
 
   // Use a BehaviorSubject so the template can subscribe to it

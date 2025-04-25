@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ recipe?.beans }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item>
+      <ion-label>
+        <h3>Grinder</h3>
+        <p>{{ recipe?.grinder }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3>Ingredients</h3>
+        <p>{{ recipe?.ingredients }}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>
+        <h3>Steps</h3>
+      </ion-label>
+    </ion-item>
+
+    @for (step of recipe?.steps?.split(','); track $index) {
+    <ion-item>
+      <ion-label>{{ step }}</ion-label>
+    </ion-item>
+    }
+  </ion-list>
+
+  <ion-button expand="block" (click)="follow()">
+    👣 Follow This Recipe
+  </ion-button>
+</ion-content>

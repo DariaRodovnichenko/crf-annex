@@ -1,33 +1,75 @@
 <app-header></app-header>
 <ion-content class="ion-padding">
-  <h2>{{ formattedTime }}</h2>
 
-  <!-- Only show START if timer not started or paused -->
-  @if (!isRunning || (isPaused && !intervalId)) {
-  <ion-button expand="block" (click)="isPaused ? resumeTimer() : startTimer()">
-    Start
-  </ion-button>
+  @if (!hasStarted) {
+    <h2>🧪 Preparation</h2>
+    <ion-list>
+      @for (tip of preBrewTips; track tip) {
+        <ion-item>
+          <ion-label>{{ tip }}</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+
+    <ion-button expand="block" color="primary" (click)="hasStarted = true">
+      ✅ I'm Ready
+    </ion-button>
+
+    <ion-button expand="block" color="medium" fill="outline" routerLink="/recipes">
+      📖 Choose Another Recipe
+    </ion-button>
+  }  @else if (!brewStarted) {
+    <h2>{{ recipe?.beans }} - {{ recipe?.country }}</h2>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          First Timed Step
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ currentInstruction }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="block" color="success" (click)="startBrew()">
+      ▶️ Start Brew Timer
+    </ion-button>
   }
 
-  <!-- Show PAUSE if running -->
-  @if (isRunning && !isPaused) {
-  <ion-button expand="block" (click)="pauseTimer()"> Pause </ion-button>
+  @else {
+    <!-- Same timed brewing UI as before -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Step {{ currentStepIndex + 1 }} / {{ brewSteps.length }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ currentInstruction }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <h2 class="timer-display">{{ formattedTime }}</h2>
+
+    @if (!isRunning || (isPaused && !intervalId)) {
+      <ion-button expand="block" (click)="isPaused ? resumeTimer() : startTimer()">
+        ▶️ {{ isPaused ? 'Resume Timer' : 'Start Timer' }}
+      </ion-button>
+    }
+
+    @if (isRunning && !isPaused) {
+      <ion-button expand="block" (click)="pauseTimer()">⏸ Pause</ion-button>
+    }
+
+    @if (isPaused) {
+      <ion-button expand="block" color="danger" (click)="stopTimer()">⏹ Stop</ion-button>
+    }
+
+    <ion-button expand="block" color="success" (click)="nextStep()" [disabled]="!isRunning">
+      ⏭️ Next Step
+    </ion-button>
   }
 
-  <!-- Show STOP if paused -->
-  @if (isPaused) {
-  <ion-button expand="block" color="danger" (click)="stopTimer()">
-    Stop
-  </ion-button>
-  }
-
-  <ion-button
-  expand="block"
-  color="medium"
-  fill="outline"
-  routerLink="/recipes"
->
-  📖 Choose a Recipe
-</ion-button>
 </ion-content>
 <app-bottom-toolbar></app-bottom-toolbar>

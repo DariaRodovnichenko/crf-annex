@@ -3,6 +3,7 @@ import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
 import { addIcons } from 'ionicons';
 import {
+  list,
   person,
   logOut,
   heart,
@@ -22,6 +23,7 @@ import {
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 
 addIcons({
+  list,
   person,
   home,
   timer,
