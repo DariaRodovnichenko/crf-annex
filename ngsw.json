@@ -1,0 +1,149 @@
+{
+  "configVersion": 1,
+  "timestamp": 1745617879351,
+  "index": "/crf-annex/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/crf-annex/chunk-2M23OMBR.js",
+        "/crf-annex/chunk-3BQBBOV7.js",
+        "/crf-annex/chunk-3NU277CL.js",
+        "/crf-annex/chunk-4DWSFPUS.js",
+        "/crf-annex/chunk-4WFVMWDK.js",
+        "/crf-annex/chunk-B43CU5JX.js",
+        "/crf-annex/chunk-BRBCZD5O.js",
+        "/crf-annex/chunk-CHNJNLC3.js",
+        "/crf-annex/chunk-DLMYCDSW.js",
+        "/crf-annex/chunk-DNBOFO4V.js",
+        "/crf-annex/chunk-E7CSNHPF.js",
+        "/crf-annex/chunk-EGMP4XQU.js",
+        "/crf-annex/chunk-FGY7J4NI.js",
+        "/crf-annex/chunk-FMLQQ57E.js",
+        "/crf-annex/chunk-FWIV7ILY.js",
+        "/crf-annex/chunk-GDX7AJUU.js",
+        "/crf-annex/chunk-GSF7FLEV.js",
+        "/crf-annex/chunk-IUSRYMBV.js",
+        "/crf-annex/chunk-K3WPQ6ID.js",
+        "/crf-annex/chunk-KMXAM5XU.js",
+        "/crf-annex/chunk-LF5XB4YN.js",
+        "/crf-annex/chunk-LFJCZM5K.js",
+        "/crf-annex/chunk-LGGBFR4V.js",
+        "/crf-annex/chunk-MEN5SDQQ.js",
+        "/crf-annex/chunk-NMH64JZY.js",
+        "/crf-annex/chunk-NMYJD6OP.js",
+        "/crf-annex/chunk-QGOPIALF.js",
+        "/crf-annex/chunk-RNULDNKP.js",
+        "/crf-annex/chunk-S4VXTGMG.js",
+        "/crf-annex/chunk-TQEIIVVC.js",
+        "/crf-annex/chunk-TR4QRV4P.js",
+        "/crf-annex/chunk-UQGGB7KG.js",
+        "/crf-annex/chunk-VBFW7A5V.js",
+        "/crf-annex/favicon.ico",
+        "/crf-annex/index.html",
+        "/crf-annex/main-HF2HJWBU.js",
+        "/crf-annex/manifest.webmanifest",
+        "/crf-annex/polyfills-FFHMD2TL.js",
+        "/crf-annex/styles-2QP67YD4.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/crf-annex/default-avatar.png",
+        "/crf-annex/icons/icon-128x128.png",
+        "/crf-annex/icons/icon-144x144.png",
+        "/crf-annex/icons/icon-152x152.png",
+        "/crf-annex/icons/icon-192x192.png",
+        "/crf-annex/icons/icon-384x384.png",
+        "/crf-annex/icons/icon-512x512.png",
+        "/crf-annex/icons/icon-72x72.png",
+        "/crf-annex/icons/icon-96x96.png",
+        "/crf-annex/logo.png"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/crf-annex/chunk-2M23OMBR.js": "4d0460af2f0ce05f7d9a682b8a252dfdcd69fd34",
+    "/crf-annex/chunk-3BQBBOV7.js": "da97b76ed1df1aa60bf6e75c1b3b711c477960c9",
+    "/crf-annex/chunk-3NU277CL.js": "bcbb7328c60de39dcb0f1b795ac53d7e0f76c399",
+    "/crf-annex/chunk-4DWSFPUS.js": "4f2b1d07aa9bca538048f3221d8771fb48eaf5d4",
+    "/crf-annex/chunk-4WFVMWDK.js": "5b6d47107e58373ea3dc79e4e6878406e21505e8",
+    "/crf-annex/chunk-B43CU5JX.js": "73485691923b650ef3c649d634c71239c18c0416",
+    "/crf-annex/chunk-BRBCZD5O.js": "2a5ef9d66c026834b27cd1811a899d7492c8f9f7",
+    "/crf-annex/chunk-CHNJNLC3.js": "4a5330c4d12eee2499444a407975b5eccadb11d8",
+    "/crf-annex/chunk-DLMYCDSW.js": "44449894cf21b9b56eb04e6ab1fe8bcbb08f808c",
+    "/crf-annex/chunk-DNBOFO4V.js": "330a86762baede1d1635c597cb6936769e9f62d0",
+    "/crf-annex/chunk-E7CSNHPF.js": "1b1ba5543c98b59637a23ef08a4611f621b87a8e",
+    "/crf-annex/chunk-EGMP4XQU.js": "e00336a105dac63ec9cbff5ec8d4bd6ac2a0ab05",
+    "/crf-annex/chunk-FGY7J4NI.js": "b60ebbd71c768b784f1e0dd08328aa937b0f286b",
+    "/crf-annex/chunk-FMLQQ57E.js": "47f587147568d3eb8d8d7d180ce9ca4507d2bd6d",
+    "/crf-annex/chunk-FWIV7ILY.js": "143a63a75a8b4ee1d7968d0eaf856296e335046f",
+    "/crf-annex/chunk-GDX7AJUU.js": "07a6c74f61ade5d20eadf06d5cec85e6a7a38ffc",
+    "/crf-annex/chunk-GSF7FLEV.js": "661f5569f697fc47d75c813b50878c97cfaff264",
+    "/crf-annex/chunk-IUSRYMBV.js": "4e48ba6f731d1dd56c899815f491db335e80ed57",
+    "/crf-annex/chunk-K3WPQ6ID.js": "a155990ed055a64f099ae6af979eaa9f1a4f4cf4",
+    "/crf-annex/chunk-KMXAM5XU.js": "7cef931b7f047f66f8cff5448a45fc6f5eab210f",
+    "/crf-annex/chunk-LF5XB4YN.js": "9a4312a44cc8ab8573488a48a18c01a6bb352c6b",
+    "/crf-annex/chunk-LFJCZM5K.js": "fff9fac700a736e6cbab1742c9f01b64f8c2ae69",
+    "/crf-annex/chunk-LGGBFR4V.js": "cf4403d5757b95bfd7bfc5b4d689e7310fa93495",
+    "/crf-annex/chunk-MEN5SDQQ.js": "894d653506f469709e951363373c281162722fe6",
+    "/crf-annex/chunk-NMH64JZY.js": "9d38eb2cdcd4ada6bc8f67fd5b92a36508d032be",
+    "/crf-annex/chunk-NMYJD6OP.js": "0175118cb5ac5fb567dcfbf6a8bcb81ace8edf1a",
+    "/crf-annex/chunk-QGOPIALF.js": "d9f85590248ff34227c0b9c8a2a647bcbfe36d63",
+    "/crf-annex/chunk-RNULDNKP.js": "637e8d413bb1c292a5bfe547d31561915dc83e4e",
+    "/crf-annex/chunk-S4VXTGMG.js": "a37191d93185d738d4b0f198fd1e993f8f6416e2",
+    "/crf-annex/chunk-TQEIIVVC.js": "c7296efb75e44b6c5b31377a35aaf8879f17f8b1",
+    "/crf-annex/chunk-TR4QRV4P.js": "0b92df369e74369c2bf099a48e82ec7042376b34",
+    "/crf-annex/chunk-UQGGB7KG.js": "78ccdd31273d25e1304e6844831c7baa52255139",
+    "/crf-annex/chunk-VBFW7A5V.js": "06eec2027fa2142a25c25a91ddeb5d76bbf7b491",
+    "/crf-annex/default-avatar.png": "477ddd9befb759ac38a15fd6c7349ff94456f881",
+    "/crf-annex/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "/crf-annex/icons/icon-128x128.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
+    "/crf-annex/icons/icon-144x144.png": "b155fd5f2fd5d2ea7760721063003c4cd95fd783",
+    "/crf-annex/icons/icon-152x152.png": "eae6e0f0c8afb8aaae339e2a569b43e9238e5e6c",
+    "/crf-annex/icons/icon-192x192.png": "15c4180454633880d98674aa7394656196c91584",
+    "/crf-annex/icons/icon-384x384.png": "94a915751ef6c9282df9aea405ad679230631814",
+    "/crf-annex/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
+    "/crf-annex/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
+    "/crf-annex/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
+    "/crf-annex/index.html": "820507d59d082c26f05760d497a27e8f461f535b",
+    "/crf-annex/logo.png": "3e3e0cc831bcffae78d87a9411b550ec1fc9a3de",
+    "/crf-annex/main-HF2HJWBU.js": "fac2b7a940e2447755f293e082b3204f42d5a64f",
+    "/crf-annex/manifest.webmanifest": "7f091dd2495a50f987182dfdd035313d8c814cf6",
+    "/crf-annex/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
+    "/crf-annex/styles-2QP67YD4.css": "e45427f82e65061d4d4894006d85f551414482af"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
