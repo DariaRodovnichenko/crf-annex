@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1746002112228,
+  "timestamp": 1746003058197,
   "index": "https://DariaRodovnichenko.github.io/crf-annex/index.html",
   "assetGroups": [
     {
@@ -46,7 +46,7 @@
         "https://DariaRodovnichenko.github.io/crf-annex/chunk-VBFW7A5V.js",
         "https://DariaRodovnichenko.github.io/crf-annex/favicon.ico",
         "https://DariaRodovnichenko.github.io/crf-annex/index.html",
-        "https://DariaRodovnichenko.github.io/crf-annex/main-M27JXZRO.js",
+        "https://DariaRodovnichenko.github.io/crf-annex/main-VZSYBXWO.js",
         "https://DariaRodovnichenko.github.io/crf-annex/manifest.webmanifest",
         "https://DariaRodovnichenko.github.io/crf-annex/polyfills-FFHMD2TL.js",
         "https://DariaRodovnichenko.github.io/crf-annex/styles-Y6AEPULF.css"
@@ -120,9 +120,9 @@
     "https://DariaRodovnichenko.github.io/crf-annex/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
     "https://DariaRodovnichenko.github.io/crf-annex/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
     "https://DariaRodovnichenko.github.io/crf-annex/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
-    "https://DariaRodovnichenko.github.io/crf-annex/index.html": "4adad333f84f2e1b89dcdf45934c8b456116974b",
+    "https://DariaRodovnichenko.github.io/crf-annex/index.html": "98b9303076a366971649d1f0ce6b6bd85d86b153",
     "https://DariaRodovnichenko.github.io/crf-annex/logo.png": "3e3e0cc831bcffae78d87a9411b550ec1fc9a3de",
-    "https://DariaRodovnichenko.github.io/crf-annex/main-M27JXZRO.js": "fa6801d4061fcab6824ba5e256d898f4f1537fe7",
+    "https://DariaRodovnichenko.github.io/crf-annex/main-VZSYBXWO.js": "4d1b0222cad7b3073357c31666bfa3fa0cd58310",
     "https://DariaRodovnichenko.github.io/crf-annex/manifest.webmanifest": "7f091dd2495a50f987182dfdd035313d8c814cf6",
     "https://DariaRodovnichenko.github.io/crf-annex/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
     "https://DariaRodovnichenko.github.io/crf-annex/styles-Y6AEPULF.css": "7106b71b53c358ad0021c6dd4b210b57a2245fc4"
