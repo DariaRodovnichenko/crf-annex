@@ -40,5 +40,16 @@ export class SyncService {
       localStorage.removeItem('coffeeLogs');
       console.log('📘 Logs synced to Firebase');
     }
+
+    // Notes sync
+    const notesData = localStorage.getItem('baristaNotes');
+    if (notesData) {
+      const notes = JSON.parse(notesData);
+      for (const note of notes) {
+        await this.dbService.saveData(`users/${uid}/notes/${note.id}`, note);
+      }
+      localStorage.removeItem('baristaNotes');
+      console.log('📝 Notes synced to Firebase');
+    }
   }
 }

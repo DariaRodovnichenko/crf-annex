@@ -11,10 +11,38 @@
   --ion-color-success: #32e67f;
   --ion-color-warning: #ffc409;
   --ion-color-danger: #ff4f81;
-  --ion-color-dark: #0f0f2d;
+  --ion-color-dark: #555578;
   --ion-color-medium: #2f2f4f;
   --ion-color-light: #e0e7ff;
 
   --ion-background-color: #0a0a23;
-  --ion-text-color: #ffffff;
+  --ion-text-color: #cde2ff;
+}
+
+[color-theme="light"] {
+  /** Cosmic Light **/
+
+  --ion-color-primary: #dcdcff;
+  --ion-color-primary-rgb: 106, 50, 255;
+
+  --ion-color-secondary: #00b8cc;
+  --ion-color-secondary-rgb: 0, 184, 204;
+
+  --ion-color-tertiary: #ffa94d;
+  --ion-color-tertiary-rgb: 255, 169, 77;
+
+  --ion-color-success: #28c76f;
+  --ion-color-warning: #ffba00;
+  --ion-color-danger: #ff4f81;
+
+  --ion-color-dark: #0a0a23;
+  --ion-color-medium: navy;
+  --ion-color-light: #00ffff;
+
+  --ion-background-color: #9ac7ff;
+  --ion-text-color: #171736;
+
+  --ion-card-background: #6a32ff;
+  --ion-toolbar-background: #f6f6fa;
+  --ion-item-background: #dcdcff;
 }

@@ -1,0 +1,68 @@
+<app-header></app-header>
+
+<ion-content class="ion-padding">
+  @if (addingNote) {
+  <ion-card>
+    <ion-card-header>
+      <ion-title>New Note</ion-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Title</ion-label>
+        <ion-input [(ngModel)]="newTitle" placeholder="Calibration Session" />
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Content</ion-label>
+        <ion-textarea
+          [(ngModel)]="newContent"
+          rows="6"
+          placeholder="Grinder: 25 clicks, Dose: 18g, Yield: 36g..."
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-button expand="block" color="success" (click)="saveNote()"
+        >💾 Save</ion-button
+      >
+      <ion-button
+        expand="block"
+        color="medium"
+        fill="outline"
+        (click)="cancelAdding()"
+        >Cancel</ion-button
+      >
+    </ion-card-content>
+  </ion-card>
+  } @else {
+  <ion-list>
+    @for (note of notes; track note.id) {
+    <ion-card>
+      <ion-card-header>
+        <strong>{{ note.title }}</strong>
+        <ion-text
+          ><small>{{ note.date | date : "medium" }}</small></ion-text
+        >
+      </ion-card-header>
+      <ion-card-content>
+        <ion-text>{{ note.content }}</ion-text>
+        <ion-button
+          size="small"
+          color="danger"
+          fill="clear"
+          (click)="deleteNote(note.id)"
+          >🗑 Delete</ion-button
+        >
+      </ion-card-content>
+    </ion-card>
+    }
+  </ion-list>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="primary" (click)="startAdding()">
+      <ion-icon name="pencil" color="light"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  }
+</ion-content>
+
+<app-bottom-toolbar></app-bottom-toolbar>

@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { DatabaseService } from '../data/database.service';
 import { AuthService } from '../auth/auth.service';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class TDSService {
@@ -15,13 +14,11 @@ export class TDSService {
       timestamp: new Date().toISOString(),
     };
 
-    const user = await firstValueFrom(this.auth.authState$);
+    const user = await this.auth.getCurrentUser();
     if (user?.isAnonymous) {
-      const existing = JSON.parse(
-        localStorage.getItem('guest-tds-values') || '[]'
-      );
+      const existing = JSON.parse(localStorage.getItem('guestTDS') || '[]');
       existing.push(entry);
-      localStorage.setItem('guest-tds-values', JSON.stringify(existing));
+      localStorage.setItem('guestTDS', JSON.stringify(existing));
       console.log('💾 TDS saved locally for guest');
     } else if (user) {
       await this.db.pushData(`users/${user.uid}/TDSValues`, entry);

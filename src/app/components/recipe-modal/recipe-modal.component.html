@@ -11,27 +11,27 @@
   <ion-list>
     <ion-item>
       <ion-label>
-        <h3>Grinder</h3>
+        <h2>Grinder</h2>
         <p>{{ recipe?.grinder }}</p>
       </ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>
-        <h3>Ingredients</h3>
+        <h2>Ingredients</h2>
         <p>{{ recipe?.ingredients }}</p>
       </ion-label>
     </ion-item>
 
     <ion-item>
       <ion-label>
-        <h3>Steps</h3>
+        <h2>Steps</h2>
       </ion-label>
     </ion-item>
 
     @for (step of recipe?.steps?.split(','); track $index) {
     <ion-item>
-      <ion-label>{{ step }}</ion-label>
+      <ion-label style="font-size: smaller">{{ step }}</ion-label>
     </ion-item>
     }
   </ion-list>

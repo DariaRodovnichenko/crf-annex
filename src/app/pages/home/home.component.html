@@ -3,25 +3,24 @@
 <ion-content class="ion-padding">
   <ion-grid>
     <ion-row>
-      @if (features$ | async; as features) {
-        @for (feature of features; track feature.id) {
-          <ion-col size="6" size-md="4" class="ion-text-center">
-            <ion-button
-              fill="clear"
-              expand="block"
-              [routerLink]="feature.route"
-              class="feature-button"
-            >
-              <ion-card tabindex="-1" inert>
-                <ion-card-content>
-                  <ion-icon [name]="feature.icon" size="large"></ion-icon>
-                  <p>{{ feature.name }}</p>
-                </ion-card-content>
-              </ion-card>
-            </ion-button>
-          </ion-col>
-        }
-      }
+      @if (features$ | async; as features) { @for (feature of features; track
+      feature.id) {
+      <ion-col size="6" size-md="4" class="ion-text-center">
+        <ion-button
+          fill="clear"
+          expand="block"
+          [routerLink]="feature.route"
+          class="feature-button"
+        >
+          <ion-card tabindex="-1" inert>
+            <ion-card-content>
+              <ion-icon [name]="feature.icon" size="large" color="light"></ion-icon>
+              <ion-text color="dark">{{ feature.name }}</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-button>
+      </ion-col>
+      } }
     </ion-row>
   </ion-grid>
 </ion-content>

@@ -109,4 +109,8 @@ export class AuthService {
       }
     });
   }
+
+  getCurrentUser(): Promise<User | null> {
+    return firstValueFrom(this.authState$);
+  }
 }

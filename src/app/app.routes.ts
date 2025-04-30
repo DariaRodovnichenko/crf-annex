@@ -12,6 +12,7 @@ import { GrinderComponent } from './pages/grinder/grinder.component';
 import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { RecipesComponent } from './pages/recipes/recipes.component';
+import { NotepadComponent } from './pages/notepad/notepad.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, data: { title: '🏠 Home' } },
@@ -64,7 +65,12 @@ export const routes: Routes = [
   {
     path: 'recipes',
     component: RecipesComponent,
-    data: { title: '📝 Recipes' },
+    data: { title: '📃 Recipes' },
+  },
+  {
+    path: 'notepad',
+    component: NotepadComponent,
+    data: { title: '📝 Notepad' },
   },
   { path: '**', redirectTo: '' },
 ];

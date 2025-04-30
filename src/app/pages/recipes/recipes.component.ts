@@ -2,22 +2,14 @@ import { RecipeService } from './../../services/recipes/recipe.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  IonButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
   IonContent,
-  IonHeader,
-  IonItem,
-  IonLabel,
   IonList,
-  IonModal,
   IonText,
-  IonTitle,
-  IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
 import { HeaderComponent } from '../../components/header/header.component';
@@ -25,22 +17,14 @@ import { BottomToolbarComponent } from '../../components/bottom-toolbar/bottom-t
 import { RecipeModalComponent } from '../../components/recipe-modal/recipe-modal.component';
 
 const UIElements = [
-  IonModal,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonButton,
   IonContent,
   IonList,
-  IonItem,
   IonText,
   IonCard,
   IonCardHeader,
   IonCardContent,
   IonCardTitle,
   IonCardSubtitle,
-  IonLabel,
 ];
 
 @Component({
