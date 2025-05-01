@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1746088146138,
+  "timestamp": 1746105968507,
   "index": "https://DariaRodovnichenko.github.io/crf-annex/index.html",
   "assetGroups": [
     {
@@ -45,9 +45,9 @@
         "https://DariaRodovnichenko.github.io/crf-annex/chunk-UQGGB7KG.js",
         "https://DariaRodovnichenko.github.io/crf-annex/chunk-VBFW7A5V.js",
         "https://DariaRodovnichenko.github.io/crf-annex/index.html",
-        "https://DariaRodovnichenko.github.io/crf-annex/main-HK4VWHAJ.js",
+        "https://DariaRodovnichenko.github.io/crf-annex/main-U3YU5PB6.js",
         "https://DariaRodovnichenko.github.io/crf-annex/polyfills-FFHMD2TL.js",
-        "https://DariaRodovnichenko.github.io/crf-annex/styles-Y6AEPULF.css"
+        "https://DariaRodovnichenko.github.io/crf-annex/styles-ASWMMUVQ.css"
       ],
       "patterns": []
     },
@@ -118,10 +118,10 @@
     "https://DariaRodovnichenko.github.io/crf-annex/chunk-TR4QRV4P.js": "0b92df369e74369c2bf099a48e82ec7042376b34",
     "https://DariaRodovnichenko.github.io/crf-annex/chunk-UQGGB7KG.js": "78ccdd31273d25e1304e6844831c7baa52255139",
     "https://DariaRodovnichenko.github.io/crf-annex/chunk-VBFW7A5V.js": "06eec2027fa2142a25c25a91ddeb5d76bbf7b491",
-    "https://DariaRodovnichenko.github.io/crf-annex/index.html": "94ca338e6262d894d6a6618790fcd728e0cef953",
-    "https://DariaRodovnichenko.github.io/crf-annex/main-HK4VWHAJ.js": "bd4ec88d4355f43036fd100f2775aaf05b403f99",
+    "https://DariaRodovnichenko.github.io/crf-annex/index.html": "6f1885837df2cc517eeec0a274a921f2fe8fa4d3",
+    "https://DariaRodovnichenko.github.io/crf-annex/main-U3YU5PB6.js": "3b60cc161c297967802238350d3385e5862ab21f",
     "https://DariaRodovnichenko.github.io/crf-annex/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
-    "https://DariaRodovnichenko.github.io/crf-annex/styles-Y6AEPULF.css": "7106b71b53c358ad0021c6dd4b210b57a2245fc4"
+    "https://DariaRodovnichenko.github.io/crf-annex/styles-ASWMMUVQ.css": "ca77c7a4941a4115547b0e6ca161bb66e0c2ca9a"
   },
   "navigationUrls": [
     {
