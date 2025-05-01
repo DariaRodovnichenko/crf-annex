@@ -1,7 +1,16 @@
 <app-header></app-header>
-<h2>💰 Expense Tracker</h2>
 
 <ion-content class="ion-padding">
+  <!-- Preferred Currency -->
+<ion-item>
+  <ion-label>Preferred Currency</ion-label>
+  <ion-select [(ngModel)]="preferredCurrency" (ionChange)="onPreferredCurrencyChange()">
+    @for (currency of availableCurrencies; track currency) {
+      <ion-select-option [value]="currency">{{ currency }}</ion-select-option>
+    }
+  </ion-select>
+</ion-item>
+
   <!-- Title -->
   <ion-item>
     <ion-label position="floating">Title</ion-label>
@@ -58,6 +67,81 @@
   >
     ➕ Add Expense
   </ion-button>
+
+  <!-- Period Filter -->
+  <ion-item>
+    <ion-label>Period</ion-label>
+    <ion-select [(ngModel)]="periodFilter" (ionChange)="applyFilters()">
+      <ion-select-option value="all">All Time</ion-select-option>
+      <ion-select-option value="thisMonth">This Month</ion-select-option>
+      <ion-select-option value="last7days">Last 7 Days</ion-select-option>
+      <ion-select-option value="custom">Custom Range</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Custom Date Filter -->
+  @if (periodFilter === 'custom') {
+  <ion-item>
+    <ion-label>From</ion-label>
+    <ion-input
+      type="date"
+      [(ngModel)]="filterStartDate"
+      (ionChange)="applyFilters()"
+    ></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>To</ion-label>
+    <ion-input
+      type="date"
+      [(ngModel)]="filterEndDate"
+      (ionChange)="applyFilters()"
+    ></ion-input>
+  </ion-item>
+  }
+
+  <!-- Expense List -->
+  @if (filteredExpenses.length > 0) {
+  <ion-list>
+    @for (exp of filteredExpenses; track $index) {
+    <ion-item>
+      <ion-label>
+        <h3>{{ exp.title }}</h3>
+        <p>{{ exp.date }} | {{ exp.category }}</p>
+        <p>
+          💵 {{ exp.amount }} {{ exp.originalCurrency }} →
+          {{ exp.convertedAmount | number : "1.2-2" }}
+          {{ exp.convertedCurrency }}
+        </p>
+      </ion-label>
+      <ion-button
+        fill="clear"
+        slot="end"
+        color="danger"
+        (click)="deleteExpense(exp.id)"
+      >
+        🗑
+      </ion-button>
+    </ion-item>
+    } </ion-list
+  >} @else {
+  <ion-text color="medium">
+    <p class="ion-text-center">No expenses added yet.</p>
+  </ion-text>
+  }
+
+  <!-- Total + Export Section -->
+<ion-item lines="full" class="ion-margin-top" *ngIf="filteredExpenses.length > 0">
+  <ion-label>
+    <strong>💵 Total for selected period:</strong>
+  </ion-label>
+  <ion-text slot="end">
+    <strong>{{ totalManualExpenses | number: '1.2-2' }} {{ preferredCurrency }}</strong>
+  </ion-text>
+</ion-item>
+
+<ion-button expand="block" fill="outline" color="primary" (click)="exportToCSV()" class="ion-margin-top">
+  📤 Export to CSV
+</ion-button>
 </ion-content>
 
 <app-bottom-toolbar></app-bottom-toolbar>

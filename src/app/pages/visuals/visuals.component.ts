@@ -13,7 +13,6 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
   IonContent,
   IonLabel,
@@ -27,7 +26,6 @@ const UIElements = [
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardSubtitle,
   IonSpinner,
   IonLabel,
   IonButton,
@@ -64,7 +62,7 @@ export class VisualsComponent implements OnInit {
       }
     });
 
-    await this.loadData(); // Initial load
+    await this.loadData();
   }
 
   async loadData() {

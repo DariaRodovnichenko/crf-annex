@@ -1,116 +1,86 @@
-import {
-  Injectable,
-  inject,
-  runInInjectionContext,
-  Injector,
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Auth,
-  authState,
+  signInAnonymously,
   signInWithEmailAndPassword,
   signOut,
-  signInAnonymously,
-  User,
+  authState,
   EmailAuthProvider,
   linkWithCredential,
+  User,
 } from '@angular/fire/auth';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { Observable, firstValueFrom, map } from 'rxjs';
 import { DatabaseService } from '../data/database.service';
 import { SyncService } from '../sync/sync.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly auth = inject(Auth);
-  private readonly injector = inject(Injector);
-  private readonly dbService = inject(DatabaseService);
-  private readonly syncService = inject(SyncService);
+  private auth = inject(Auth);
+  private db = inject(DatabaseService);
+  private sync = inject(SyncService);
 
   readonly authState$: Observable<User | null> = authState(this.auth);
 
-  login(email: string, password: string) {
-    return runInInjectionContext(this.injector, () =>
-      signInWithEmailAndPassword(this.auth, email, password)
-    );
+  async login(email: string, password: string) {
+    return signInWithEmailAndPassword(this.auth, email, password);
   }
 
   async loginAnonymously() {
-    return runInInjectionContext(this.injector, async () => {
-      const cred = await signInAnonymously(this.auth);
-      const user = cred.user;
-
-      if (!user) throw new Error('Anonymous sign-in failed.');
-
-      // Skip writing to Firebase for guests
-      console.log('👻 Guest session started (local only)');
-      return cred;
-    });
+    const cred = await signInAnonymously(this.auth);
+    const user = cred.user;
+    if (!user) throw new Error('Anonymous sign-in failed.');
+    console.log('👻 Guest session started');
+    return user;
   }
 
   async logout() {
-    return runInInjectionContext(this.injector, async () => {
-      await signOut(this.auth);
-      console.log('🚪 Logged out');
-
-      // Immediately create a new anonymous session
-      await this.loginAnonymously();
-    });
+    await signOut(this.auth);
+    console.log('🚪 Logged out');
+    await this.loginAnonymously();
   }
 
-  getUid(): Observable<string | null> {
-    return this.authState$.pipe(
-      map((user) => {
-        console.log('🧠 getUid(): Current Firebase UID:', user?.uid);
-        return user?.uid ?? null;
-      })
-    );
+  async getUidValue(): Promise<string | null> {
+    const user = await firstValueFrom(this.authState$);
+    return user?.uid ?? null;
+  }
+
+  async getCurrentUser(): Promise<User | null> {
+    return firstValueFrom(this.authState$);
   }
 
   async upgradeAnonymousAccount(
     email: string,
     password: string
   ): Promise<void> {
-    return runInInjectionContext(this.injector, async () => {
-      const user = this.auth.currentUser;
-      if (!user?.isAnonymous) throw new Error('No anonymous user to upgrade.');
+    const user = this.auth.currentUser;
+    if (!user?.isAnonymous) throw new Error('No anonymous user to upgrade.');
 
-      const credential = EmailAuthProvider.credential(email, password);
+    const credential = EmailAuthProvider.credential(email, password);
+    try {
+      const result = await linkWithCredential(user, credential);
+      console.log('✅ Upgraded anonymous user:', result.user);
 
-      try {
-        const result = await linkWithCredential(user, credential);
-        console.log('✅ Anonymous account upgraded to:', result.user);
+      await this.db.updateData(`users/${user.uid}`, {
+        email: result.user.email,
+        role: 'user',
+      });
 
-        await this.dbService.updateData(`users/${user.uid}`, {
-          email: result.user.email,
-          role: 'registered',
-        });
-
-        // Sync local data after upgrade
-        await this.syncService.syncLocalDataToFirebase(user.uid);
-      } catch (error: any) {
-        if (error.code === 'auth/email-already-in-use') {
-          // 🧘 Suppress error and switch to regular login
-          console.warn(
-            '🔁 Email already in use. Switching to login silently...'
-          );
-          try {
-            await this.login(email, password);
-            const uid = (await firstValueFrom(this.authState$))?.uid;
-            if (uid) {
-              await this.syncService.syncLocalDataToFirebase(uid);
-              console.log('✅ Logged in and synced to existing user');
-            }
-          } catch (loginErr) {
-            console.error('❌ Fallback login failed', loginErr);
-          }
-        } else {
-          console.error('❌ Upgrade failed unexpectedly:', error);
-          throw error;
+      await this.sync.syncLocalDataToFirebase(user.uid);
+    } catch (error: any) {
+      if (error.code === 'auth/email-already-in-use') {
+        console.warn('🔁 Email already in use. Trying fallback login...');
+        try {
+          await this.login(email, password);
+          const uid = (await firstValueFrom(this.authState$))?.uid;
+          if (uid) await this.sync.syncLocalDataToFirebase(uid);
+        } catch (loginErr) {
+          console.error('❌ Fallback login failed', loginErr);
+          throw loginErr;
         }
+      } else {
+        console.error('❌ Upgrade failed:', error);
+        throw error;
       }
-    });
-  }
-
-  getCurrentUser(): Promise<User | null> {
-    return firstValueFrom(this.authState$);
+    }
   }
 }

@@ -68,7 +68,7 @@ export class GrinderComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       const data = await firstValueFrom(
-        this.http.get<GrinderSpec[]>('/data/grinders.json')
+        this.http.get<GrinderSpec[]>('assets/data/grinders.json')
       );
       this.grinders = data;
 

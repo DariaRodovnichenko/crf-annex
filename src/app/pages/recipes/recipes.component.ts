@@ -35,8 +35,8 @@ const UIElements = [
   styleUrls: ['./recipes.component.css'],
 })
 export class RecipesComponent implements OnInit {
-  worldRecipes: any[] = []; // you can load recipes from your database
-  favoriteRecipes: any[] = []; // optional if needed
+  worldRecipes: any[] = [];
+  favoriteRecipes: any[] = [];
   selectedRecipe: any = null;
   userUid: string | null = null;
 
@@ -86,6 +86,6 @@ export class RecipesComponent implements OnInit {
       this.router.navigate(['/timer'], {
         state: { recipe: selected },
       });
-    }, 300); // Enough for modal to fully close (match Ionic's fade-out)
+    }, 300);
   }
 }

@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  inject,
-  Injector,
-  runInInjectionContext,
-} from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Database,
   ref,
@@ -12,84 +7,64 @@ import {
   update,
   remove,
   push,
+  DataSnapshot,
 } from '@angular/fire/database';
 
 @Injectable({ providedIn: 'root' })
 export class DatabaseService {
   private db = inject(Database);
-  private injector = inject(Injector);
 
-  // Save any data to a specific path
-  async saveData(path: string, data: any): Promise<void> {
-    return runInInjectionContext(this.injector, () => {
-      const dataRef = ref(this.db, path);
-      return set(dataRef, data);
-    });
+  // Write or replace data at a given path
+  saveData<T = any>(path: string, data: T): Promise<void> {
+    return set(ref(this.db, path), data);
   }
 
-  // Update data without overwriting entire object
-  async updateData(path: string, data: any): Promise<void> {
-    return runInInjectionContext(this.injector, () => {
-      const dataRef = ref(this.db, path);
-      return update(dataRef, data);
-    });
+  // Update one or more properties without overwriting the whole object
+  updateData<T = any>(path: string, data: Partial<T>): Promise<void> {
+    return update(ref(this.db, path), data);
   }
 
-  // Delete data at a specific path
-  async deleteData(path: string): Promise<void> {
-    return runInInjectionContext(this.injector, () => {
-      const dataRef = ref(this.db, path);
-      return remove(dataRef);
-    });
+  // Delete data at a path
+  deleteData(path: string): Promise<void> {
+    return remove(ref(this.db, path));
   }
 
-  // Get data from a specific path
-  async getData(path: string): Promise<any> {
-    return runInInjectionContext(this.injector, async () => {
-      const dataRef = ref(this.db, path);
-      const snapshot = await get(dataRef);
-      return snapshot.exists() ? snapshot.val() : null;
-    });
+  // Read data from a path
+  async getData<T = any>(path: string): Promise<T | null> {
+    const snapshot: DataSnapshot = await get(ref(this.db, path));
+    return snapshot.exists() ? (snapshot.val() as T) : null;
   }
 
-  async pushData(path: string, data: any): Promise<any> {
-    return runInInjectionContext(this.injector, () => {
-      const listRef = ref(this.db, path);
-      return push(listRef, data);
-    });
+  // Push new data to a list path and return the generated key
+  async pushData<T = any>(path: string, data: T): Promise<string> {
+    const newRef = await push(ref(this.db, path), data);
+    return newRef.key as string;
   }
 
-  // Get recipe by ID from /recipes
-  async getRecipeById(recipeId: string): Promise<any> {
-    return runInInjectionContext(this.injector, async () => {
-      const recipeRef = ref(this.db, `recipes/${recipeId}`);
-      const snapshot = await get(recipeRef);
-      return snapshot.exists() ? { id: recipeId, ...snapshot.val() } : null;
-    });
+  // Get a single recipe by ID
+  async getRecipeById(recipeId: string): Promise<any | null> {
+    const data = await this.getData(`recipes/${recipeId}`);
+    return data ? { id: recipeId, ...data } : null;
   }
 
-  // Get user's created recipes
+  // Get all created recipes for a user
   async getUserRecipes(uid: string): Promise<any[]> {
-    return runInInjectionContext(this.injector, async () => {
-      const recipesRef = ref(this.db, `users/${uid}/createdRecipes`);
-      const snapshot = await get(recipesRef);
-      return snapshot.exists() ? Object.values(snapshot.val()) : [];
-    });
+    const data = await this.getData<Record<string, any>>(
+      `users/${uid}/createdRecipes`
+    );
+    return data ? Object.values(data) : [];
   }
 
-  // Get full recipe objects from user favorites
+  // Get all favorite recipes for a user
   async getUserFavorites(uid: string): Promise<any[]> {
-    return runInInjectionContext(this.injector, async () => {
-      const favRef = ref(this.db, `users/${uid}/favorites`);
-      const snapshot = await get(favRef);
-      return snapshot.exists() ? Object.values(snapshot.val()) : [];
-    });
+    const data = await this.getData<Record<string, any>>(
+      `users/${uid}/favorites`
+    );
+    return data ? Object.values(data) : [];
   }
 
+  // Remove one favorite recipe from a user
   async removeFromFavorites(uid: string, recipeId: string): Promise<void> {
-    return runInInjectionContext(this.injector, () => {
-      const path = `users/${uid}/favorites/${recipeId}`;
-      return remove(ref(this.db, path));
-    });
+    return this.deleteData(`users/${uid}/favorites/${recipeId}`);
   }
 }

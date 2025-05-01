@@ -2,13 +2,6 @@
 
 <ion-content>
   <ion-card>
-    <ion-card-header>
-      <ion-card-title>📊 TDS Readings History</ion-card-title>
-      <ion-card-subtitle
-        >Your recent scanned values over time</ion-card-subtitle
-      >
-    </ion-card-header>
-
     <ion-card-content class="chart">
       <!-- Loading Spinner -->
       @if (isLoading) {
@@ -30,7 +23,6 @@
           <app-tds-graph
             [tds]="point.tds"
             [yield]="point.yield"
-            [title]="'TDS Graph'"
           ></app-tds-graph>
 
           <ion-button

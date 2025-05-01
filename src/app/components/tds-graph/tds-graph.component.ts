@@ -7,14 +7,9 @@ import {
   ScatterDataPoint,
 } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-} from '@ionic/angular/standalone';
+import { IonCard, IonCardContent } from '@ionic/angular/standalone';
 
-const UIElements = [IonCard, IonCardHeader, IonCardTitle, IonCardContent];
+const UIElements = [IonCard, IonCardContent];
 
 @Component({
   selector: 'app-tds-graph',
@@ -40,10 +35,10 @@ export class TDSGraphComponent implements OnChanges {
             { x: 22, y: 1.15 },
             { x: 22, y: 1.35 },
             { x: 18, y: 1.35 },
-            { x: 18, y: 1.15 }, // close the shape
+            { x: 18, y: 1.15 },
           ],
-          backgroundColor: 'rgba(144, 238, 144, 0.3)', // light green fill
-          borderColor: '#81c784', // green border
+          backgroundColor: 'rgba(144, 238, 144, 0.3)',
+          borderColor: '#81c784',
           fill: true,
           showLine: true,
           pointRadius: 0,

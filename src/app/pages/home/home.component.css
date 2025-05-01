@@ -1,0 +1,32 @@
+.feature-button {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+ion-card {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-shadow: none;
+  background: transparent;
+}
+
+ion-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+ion-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+ion-text {
+  font-size: 0.9rem;
+}

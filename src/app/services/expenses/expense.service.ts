@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Expense } from '../../interfaces/expense.model';
 import { DatabaseService } from '../data/database.service';
 import { AuthService } from '../auth/auth.service';
-import { firstValueFrom } from 'rxjs';
+import { CoffeeLog } from '../../interfaces/log.model';
 
 @Injectable({ providedIn: 'root' })
 export class ExpenseService {
@@ -13,7 +13,7 @@ export class ExpenseService {
   constructor(private db: DatabaseService, private auth: AuthService) {}
 
   async loadExpenses(): Promise<Expense[]> {
-    const uid = await firstValueFrom(this.auth.getUid());
+    const uid = await this.auth.getUidValue();
 
     let expenses: Expense[] = [];
 
@@ -32,7 +32,7 @@ export class ExpenseService {
   }
 
   async addExpense(expense: Expense): Promise<Expense[]> {
-    const uid = await firstValueFrom(this.auth.getUid());
+    const uid = await this.auth.getUidValue();
 
     let current = [expense, ...this.expensesSubject.value];
 
@@ -50,7 +50,7 @@ export class ExpenseService {
   }
 
   async deleteExpense(id: string): Promise<void> {
-    const uid = await firstValueFrom(this.auth.getUid());
+    const uid = await this.auth.getUidValue();
 
     const updated = this.expensesSubject.value.filter((e) => e.id !== id);
 
@@ -65,11 +65,15 @@ export class ExpenseService {
     this.expensesSubject.next(updated);
   }
 
-  getTotal(): number {
-    return this.expensesSubject.value.reduce(
-      (sum, e) => sum + (e.convertedAmount ?? e.amount),
-      0
-    );
+  getTotalFor(expenses: Expense[]): number {
+    const raw = expenses.reduce((sum, e) => sum + e.convertedAmount, 0);
+    return Math.round(raw * 100) / 100;
+  }
+
+  getCoffeeShopTotal(logs: CoffeeLog[]): number {
+    return logs
+      .filter((l) => l.source === 'Coffee Shop' && l.cost > 0)
+      .reduce((sum, l) => sum + l.cost, 0);
   }
 
   getExpenses(): Expense[] {
@@ -77,7 +81,7 @@ export class ExpenseService {
   }
 
   async clearAllExpenses(): Promise<void> {
-    const uid = await firstValueFrom(this.auth.getUid());
+    const uid = await this.auth.getUidValue();
 
     if (uid === null) {
       localStorage.removeItem('guestExpenses');

@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { DatabaseService } from '../data/database.service';
 import { CoffeeLog } from '../../interfaces/log.model';
