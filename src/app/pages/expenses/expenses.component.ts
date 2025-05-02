@@ -23,6 +23,8 @@ import {
   IonSelectOption,
   IonText,
 } from '@ionic/angular/standalone';
+import { LocalStorageService } from '../../services/local-storage/local-storage.service';
+import { LogService } from '../../services/logs/logs.service';
 
 @Component({
   selector: 'app-expenses',
@@ -51,11 +53,11 @@ export class ExpensesComponent implements OnInit {
   amount: number | null = null;
   category: 'Beans' | 'Equipment' | 'Accessories' | 'Other' = 'Beans';
   currency = 'USD';
+  availableCurrencies: string[] = [];
   date = new Date().toISOString().split('T')[0];
 
   // Preferences
-  preferredCurrency = localStorage.getItem('preferredCurrency') || 'USD';
-  availableCurrencies: string[] = [];
+  preferredCurrency = 'USD';
 
   // Data
   expenses: Expense[] = [];
@@ -71,16 +73,17 @@ export class ExpensesComponent implements OnInit {
   constructor(
     private expenseService: ExpenseService,
     private currencyService: CurrencyConverterService,
+    private local: LocalStorageService,
+    private logService: LogService,
     private cdr: ChangeDetectorRef
   ) {}
 
   async ngOnInit(): Promise<void> {
-    await this.expenseService.loadExpenses();
-    this.expenses = this.expenseService.getExpenses();
+    // Load preferred currency from LocalStorage
+    this.preferredCurrency =
+      (await this.local.get<string>('preferredCurrency')) || 'USD';
 
-    await this.expenseService.loadExpenses();
-    this.logs = JSON.parse(localStorage.getItem('coffeeLogs') || '[]');
-
+    // Load all available currencies
     const symbols = await firstValueFrom(
       this.currencyService.getAvailableCurrencies()
     );
@@ -88,11 +91,22 @@ export class ExpensesComponent implements OnInit {
       ? symbols
       : [this.preferredCurrency, ...symbols];
 
-    this.expenses = await this.currencyService.recalculateExpenses(
-      this.expenses,
+    // Load user expenses
+    await this.expenseService.loadExpenses();
+
+    // Load logs (coffee consumption)
+    this.logs = await this.logService.getUserLogs();
+
+    // Convert log costs to preferredCurrency
+    this.logs = await this.currencyService.recalculateLogCosts(
+      this.logs,
       this.preferredCurrency
     );
-    this.applyFilters();
+
+    // Apply conversion and filtering
+    await this.reloadExpensesWithConversion();
+
+    // Trigger change detection
     this.cdr.detectChanges();
   }
 
@@ -123,30 +137,19 @@ export class ExpensesComponent implements OnInit {
 
     await this.expenseService.addExpense(newExpense);
     this.resetForm();
-    this.expenses = await this.currencyService.recalculateExpenses(
-      this.expenses,
-      this.preferredCurrency
-    );
-    this.applyFilters();
+
+    await this.reloadExpensesWithConversion();
     this.cdr.detectChanges();
   }
 
   async deleteExpense(id: string): Promise<void> {
     await this.expenseService.deleteExpense(id);
-    this.expenses = await this.currencyService.recalculateExpenses(
-      this.expenses,
-      this.preferredCurrency
-    );
-    this.applyFilters();
+    await this.reloadExpensesWithConversion();
   }
 
   async onPreferredCurrencyChange(): Promise<void> {
-    localStorage.setItem('preferredCurrency', this.preferredCurrency);
-    this.expenses = await this.currencyService.recalculateExpenses(
-      this.expenses,
-      this.preferredCurrency
-    );
-    this.applyFilters();
+    await this.local.save('preferredCurrency', this.preferredCurrency);
+    await this.reloadExpensesWithConversion();
   }
 
   resetForm(): void {
@@ -190,6 +193,28 @@ export class ExpensesComponent implements OnInit {
     this.filteredExpenses = [...this.expenses];
   }
 
+  private async mergeLogsIntoExpenses(): Promise<Expense[]> {
+    const logsToConvert = this.logs
+      .filter((log) => log.source === 'Coffee Shop' && log.cost > 0)
+      .map((log) => {
+        return {
+          id: `log-${log.id}`, // prefix to avoid conflict with real expense IDs
+          title: '☕ Coffee Shop',
+          amount: log.cost,
+          category: 'Other',
+          date: log.date,
+          originalCurrency: log.currency || this.preferredCurrency,
+          convertedAmount: log.cost, // placeholder; will be updated
+          convertedCurrency: this.preferredCurrency,
+        } as Expense;
+      });
+
+    return this.currencyService.recalculateExpenses(
+      logsToConvert,
+      this.preferredCurrency
+    );
+  }
+
   get totalManualExpenses(): number {
     return (
       Math.round(this.expenseService.getTotalFor(this.filteredExpenses) * 100) /
@@ -197,12 +222,8 @@ export class ExpensesComponent implements OnInit {
     );
   }
 
-  get totalCoffeeShopCost(): number {
-    return this.expenseService.getCoffeeShopTotal(this.logs);
-  }
-
   get grandTotal(): number {
-    return this.totalManualExpenses + this.totalCoffeeShopCost;
+    return this.totalManualExpenses;
   }
 
   exportToCSV(): void {
@@ -222,5 +243,18 @@ export class ExpensesComponent implements OnInit {
     link.href = url;
     link.download = 'filtered_expenses.csv';
     link.click();
+  }
+
+  private async reloadExpensesWithConversion(): Promise<void> {
+    const baseExpenses = this.expenseService.getExpenses();
+    const convertedExpenses = await this.currencyService.recalculateExpenses(
+      baseExpenses,
+      this.preferredCurrency
+    );
+
+    const logExpenses = await this.mergeLogsIntoExpenses();
+
+    this.expenses = [...convertedExpenses, ...logExpenses];
+    this.applyFilters();
   }
 }

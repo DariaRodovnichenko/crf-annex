@@ -3,9 +3,6 @@
 <ion-content class="ion-padding">
   <!-- Add Log Section -->
   <ion-card>
-    <ion-card-header>
-      <ion-card-title>➕ Add Coffee Log</ion-card-title>
-    </ion-card-header>
     <ion-card-content>
       <form ngForm (ngSubmit)="onSubmit()">
         <!-- Date -->
@@ -50,17 +47,36 @@
           ></ion-input>
         </ion-item>
 
-        <!-- Cost -->
-        <ion-item>
-          <ion-label position="stacked">Cost (CHF)</ion-label>
-          <ion-input
-            type="number"
-            [ngModel]="newLog.cost"
-            (ngModelChange)="updateNewLog('cost', $event)"
-            name="cost"
-            [disabled]="newLog.source !== 'Coffee Shop'"
-          ></ion-input>
-        </ion-item>
+        <!-- Cost + Currency in row -->
+        <div class="cost-row">
+          <ion-item>
+            <ion-label position="stacked">Cost</ion-label>
+            <ion-input
+              type="number"
+              [ngModel]="newLog.cost"
+              (ngModelChange)="updateNewLog('cost', $event)"
+              name="cost"
+              [disabled]="newLog.source !== 'Coffee Shop'"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Currency</ion-label>
+            <ion-select
+              [ngModelOptions]="{ standalone: true }"
+              interface="popover"
+              [ngModel]="newLog.currency"
+              (ngModelChange)="updateNewLog('currency', $event)"
+              [disabled]="newLog.source !== 'Coffee Shop'"
+            >
+              @for (currency of availableCurrencies; track currency) {
+              <ion-select-option [value]="currency">{{
+                currency
+              }}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+        </div>
 
         <!-- Brew Method -->
         <ion-item>

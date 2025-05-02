@@ -2,11 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { DatabaseService } from '../data/database.service';
 import { CoffeeLog } from '../../interfaces/log.model';
+import { LocalStorageService } from '../local-storage/local-storage.service';
 
 @Injectable({ providedIn: 'root' })
 export class LogService {
   private auth = inject(AuthService);
   private db = inject(DatabaseService);
+  private local = inject(LocalStorageService);
   private storageKey = 'coffeeLogs';
 
   async addLog(log: CoffeeLog): Promise<void> {
@@ -14,9 +16,9 @@ export class LogService {
     log.id ||= crypto.randomUUID(); // ensure ID
 
     if (user?.isAnonymous) {
-      const logs = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+      const logs = (await this.local.get<CoffeeLog[]>(this.storageKey)) || [];
       logs.push(log);
-      localStorage.setItem(this.storageKey, JSON.stringify(logs));
+      await this.local.save(this.storageKey, logs);
       console.log('📦 Log saved locally (guest)');
     } else if (user) {
       const path = `users/${user.uid}/logs/${log.id}`;
@@ -30,21 +32,20 @@ export class LogService {
     if (!user) return [];
 
     if (user.isAnonymous) {
-      return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
+       return (await this.local.get<CoffeeLog[]>(this.storageKey)) || [];
     }
 
-    const data = await this.db.getData(`users/${user.uid}/logs`);
-    return data ? Object.values(data) : [];
+    return await this.db.getUserLogs(user.uid);
   }
 
   async deleteUserLog(id: string): Promise<void> {
     const user = await this.auth.getCurrentUser();
 
     if (user?.isAnonymous) {
-      const logs = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
-      const updated = logs.filter((log: CoffeeLog) => log.id !== id);
-      localStorage.setItem(this.storageKey, JSON.stringify(updated));
-      console.log('🗑️ Log deleted locally (guest)');
+       const logs = (await this.local.get<CoffeeLog[]>(this.storageKey)) || [];
+       const updated = logs.filter((log) => log.id !== id);
+       await this.local.save(this.storageKey, updated);
+       console.log('🗑️ Log deleted locally (guest)');
     } else if (user) {
       const path = `users/${user.uid}/logs/${id}`;
       await this.db.deleteData(path);

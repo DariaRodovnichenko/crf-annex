@@ -9,6 +9,7 @@ import {
   push,
   DataSnapshot,
 } from '@angular/fire/database';
+import { CoffeeLog } from '../../interfaces/log.model';
 
 @Injectable({ providedIn: 'root' })
 export class DatabaseService {
@@ -39,6 +40,14 @@ export class DatabaseService {
   async pushData<T = any>(path: string, data: T): Promise<string> {
     const newRef = await push(ref(this.db, path), data);
     return newRef.key as string;
+  }
+
+  // Get logs
+  async getUserLogs(uid: string): Promise<CoffeeLog[]> {
+    const data = await this.getData<Record<string, CoffeeLog>>(
+      `users/${uid}/logs`
+    );
+    return data ? Object.values(data) : [];
   }
 
   // Get a single recipe by ID

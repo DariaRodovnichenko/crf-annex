@@ -22,7 +22,7 @@ export const routes: Routes = [
     component: DashboardComponent,
     data: { title: '🧪 Extraction Analysis' },
   },
-  { path: 'logs', component: LogsComponent, data: { title: '📘 Brew Logs' } },
+  { path: 'logs', component: LogsComponent, data: { title: '📘 Coffee Logs' } },
   {
     path: 'settings',
     component: SettingsComponent,

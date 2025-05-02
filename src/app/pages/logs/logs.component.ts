@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { CoffeeLog } from '../../interfaces/log.model';
 
 // Services
@@ -25,6 +25,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from '@ionic/angular/standalone';
+import { CurrencyConverterService } from '../../services/currencyApi/currency-converter.service';
 
 const UIElements = [
   IonContent,
@@ -56,6 +57,10 @@ const UIElements = [
   styleUrls: ['./logs.component.css'],
 })
 export class LogsComponent implements OnInit {
+  constructor(private currencyService: CurrencyConverterService) {}
+
+  availableCurrencies: string[] = [];
+
   private readonly logService = inject(LogService);
   logs$ = new BehaviorSubject<CoffeeLog[]>([]);
   selectedDate: string = new Date().toISOString().split('T')[0];
@@ -65,12 +70,20 @@ export class LogsComponent implements OnInit {
     date: this.selectedDate,
     gramsUsed: 0,
     cost: 0,
+    currency: 'USD',
     brewMethod: '',
     source: 'Home',
   };
 
   async ngOnInit() {
     await this.loadLogs();
+
+    const symbols = await firstValueFrom(
+      this.currencyService.getAvailableCurrencies()
+    );
+    this.availableCurrencies = symbols.includes(this.newLog.currency)
+      ? symbols
+      : [this.newLog.currency, ...symbols];
   }
 
   async loadLogs() {
@@ -128,6 +141,7 @@ export class LogsComponent implements OnInit {
       date: this.selectedDate,
       gramsUsed: 0,
       cost: 0,
+      currency: 'USD',
       brewMethod: '',
       source: 'Home',
     };

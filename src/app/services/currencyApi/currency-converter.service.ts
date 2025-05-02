@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, firstValueFrom, map, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Expense } from '../../interfaces/expense.model';
+import { CoffeeLog } from '../../interfaces/log.model';
 
 @Injectable({
   providedIn: 'root',
@@ -13,8 +14,17 @@ export class CurrencyConverterService {
 
   constructor(private http: HttpClient) {}
 
-  // Convert a value from one currency to another. Uses base rates and multiplies manually.
-  convert(from: string, to: string, amount: number): Observable<number> {
+  // Convert a value from one currency to another
+  convert(
+    from: string | undefined,
+    to: string | undefined,
+    amount: number
+  ): Observable<number> {
+    if (!from || !to) {
+      console.warn('⚠️ Missing currency for conversion:', { from, to });
+      return of(amount);
+    }
+
     return this.fetchExchangeRates(from).pipe(
       map((rates) => {
         const rate = rates[to];
@@ -27,7 +37,7 @@ export class CurrencyConverterService {
     );
   }
 
-  // Get available currency symbols (ISO codes).
+  // Get available currency symbols
   getAvailableCurrencies(): Observable<string[]> {
     return this.http
       .get<any>(`${this.baseUrl}/currencies?apikey=${this.apiKey}`)
@@ -40,8 +50,15 @@ export class CurrencyConverterService {
       );
   }
 
-  // Fetch exchange rates using base currency.
-  fetchExchangeRates(base: string): Observable<{ [key: string]: number }> {
+  // Fetch exchange rates using base currency
+  fetchExchangeRates(
+    base: string | undefined
+  ): Observable<{ [key: string]: number }> {
+    if (!base) {
+      console.warn('⚠️ No base currency provided to fetchExchangeRates');
+      return of({});
+    }
+
     return this.http
       .get<any>(
         `${this.baseUrl}/latest?apikey=${this.apiKey}&base_currency=${base}`
@@ -64,7 +81,7 @@ export class CurrencyConverterService {
     return result;
   }
 
-  // Recalculate all expenses for a new preferred currency.
+  // Recalculate all expenses for a new preferred currency
   async recalculateExpenses(
     expenses: Expense[],
     preferredCurrency: string
@@ -86,6 +103,30 @@ export class CurrencyConverterService {
           ...exp,
           convertedAmount,
           convertedCurrency: preferredCurrency,
+        };
+      })
+    );
+  }
+
+  // Recalculate Coffee Logs
+  async recalculateLogCosts(
+    logs: CoffeeLog[],
+    preferredCurrency: string
+  ): Promise<CoffeeLog[]> {
+    return await Promise.all(
+      logs.map(async (log) => {
+        const fromCurrency = log.currency || 'USD';
+        const converted =
+          fromCurrency === preferredCurrency
+            ? log.cost
+            : await firstValueFrom(
+                this.convert(fromCurrency, preferredCurrency, log.cost)
+              );
+
+        return {
+          ...log,
+          cost: Math.round(converted * 100) / 100,
+          currency: preferredCurrency,
         };
       })
     );

@@ -1,8 +1,6 @@
 <app-header></app-header>
 
 <ion-content class="ion-padding">
-  <h2>⚙️ Grinder Converter</h2>
-
   <!-- From Grinder -->
   <ion-item>
     <ion-label>From Grinder</ion-label>
@@ -45,7 +43,7 @@
   <ion-button expand="block" (click)="convert()">Convert</ion-button>
 
   <!-- Results -->
- @if (result !== null) {
+  @if (result !== null) {
   <ion-card class="ion-margin-top">
     <ion-card-header>
       <ion-card-title>🧮 Conversion Result</ion-card-title>
@@ -57,11 +55,12 @@
       </p>
       <p>
         ✨ <strong>{{ fromValue }}</strong> {{ fromGrinder.stepUnit }} on
-        <strong>{{ fromGrinder.model }}</strong> ≈ <strong>{{ result }}</strong>
-        {{ toGrinder.stepUnit }} on <strong>{{ toGrinder.model }}</strong>
+        <strong>{{ fromGrinder.model }}</strong> ≈
+        <strong>{{ result }}</strong> {{ toGrinder.stepUnit }} on
+        <strong>{{ toGrinder.model }}</strong>
       </p>
     </ion-card-content>
   </ion-card>
-}
+  }
 </ion-content>
 <app-bottom-toolbar></app-bottom-toolbar>

@@ -4,5 +4,6 @@ export interface CoffeeLog {
   source: 'Home' | 'Coffee Shop' | 'Gifted';
   gramsUsed: number;
   cost: number;
+  currency: string;
   brewMethod: string;
 }

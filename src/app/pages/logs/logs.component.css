@@ -1,0 +1,8 @@
+.cost-row {
+  display: flex;
+  width: 100%;
+}
+
+.cost-row ion-item {
+  flex: 1;
+}
