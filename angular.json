@@ -51,7 +51,7 @@
               }
             ],
             "scripts": [],
-            "outputPath": "dist/annex-crf",
+            "outputPath": "dist/annex-crf/browser",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],

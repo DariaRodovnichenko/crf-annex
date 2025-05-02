@@ -41,15 +41,10 @@ export class AppComponent implements OnInit {
     // Wait until Angular is fully bootstrapped
     await firstValueFrom(this.appRef.isStable.pipe(filter((stable) => stable)));
 
-    const user = await firstValueFrom(this.authService.authState$);
-    if (!user) {
-      console.log('🔐 No user detected – logging in anonymously...');
-      try {
-        await this.authService.loginAnonymously();
-        console.log('✅ Anonymous login success');
-      } catch (err) {
-        console.error('❌ Anonymous login failed', err);
-      }
+    try {
+      await this.authService.loginAnonymously();
+    } catch (err) {
+      console.error('❌ Anonymous login failed', err);
     }
   }
 

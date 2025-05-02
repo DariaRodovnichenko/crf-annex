@@ -26,11 +26,22 @@ export class AuthService {
   }
 
   async loginAnonymously() {
-    const cred = await signInAnonymously(this.auth);
-    const user = cred.user;
-    if (!user) throw new Error('Anonymous sign-in failed.');
-    console.log('👻 Guest session started');
-    return user;
+    const currentUser = await this.getCurrentUser();
+    if (currentUser) {
+      console.log('✅ User already signed in:', currentUser.uid);
+      return currentUser;
+    }
+
+    try {
+      const cred = await signInAnonymously(this.auth);
+      const user = cred.user;
+      if (!user) throw new Error('Anonymous sign-in failed.');
+      console.log('👻 Guest session started');
+      return user;
+    } catch (err) {
+      console.error('❌ Anonymous login failed:', err);
+      throw err;
+    }
   }
 
   async logout() {
