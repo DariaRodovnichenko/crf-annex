@@ -4,7 +4,7 @@
     "model": "C40 MK4",
     "type": "manual",
     "minMicrons": 0,
-    "maxMicrons": 1200,
+    "maxMicrons": 1090,
     "steps": 40,
     "stepUnit": "click"
   },
@@ -13,7 +13,43 @@
     "model": "C40 MK4 (Red Clix)",
     "type": "manual",
     "minMicrons": 0,
-    "maxMicrons": 1200,
+    "maxMicrons": 1090,
+    "steps": 80,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "Comandante",
+    "model": "C60 Baracuda",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1090,
+    "steps": 55,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "Comandante",
+    "model": "C60 Baracuda (Gold Clix)",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1090,
+    "steps": 110,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "Comandante",
+    "model": "X25 Trailmaster",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1090,
+    "steps": 40,
+    "stepUnit": "click"
+  },
+  {
+    "brand": "Comandante",
+    "model": "X25 Trailmaster (Red Clix)",
+    "type": "manual",
+    "minMicrons": 0,
+    "maxMicrons": 1090,
     "steps": 80,
     "stepUnit": "click"
   },
@@ -23,7 +59,7 @@
     "type": "manual",
     "minMicrons": 0,
     "maxMicrons": 1400,
-    "steps": 155,
+    "steps": 150,
     "stepUnit": "click"
   },
   {
@@ -31,8 +67,8 @@
     "model": "J-Max",
     "type": "manual",
     "minMicrons": 0,
-    "maxMicrons": 1190,
-    "steps": 135,
+    "maxMicrons": 1400,
+    "steps": 159,
     "stepUnit": "click"
   },
   {
